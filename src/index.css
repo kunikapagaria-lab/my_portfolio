@@ -1004,33 +1004,36 @@ body {
   border-radius: 20px;
 }
 
-/* Small Tabs inside pages for quick turning */
-.corner-tab {
+/* Book-style centered page numbers */
+.page-number {
   position: absolute;
-  bottom: 15px;
-  background: rgba(197, 168, 128, 0.2);
-  color: #3e4a68;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 4px;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: rgba(62, 74, 104, 0.65);
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: all 0.2s ease;
+  user-select: none;
+  transition: color 0.2s ease, transform 0.2s ease;
   z-index: 5;
+  white-space: nowrap;
+  pointer-events: auto !important;
 }
 
-.corner-tab:hover {
-  background: var(--color-gold);
-  color: white;
+.page-number:hover {
+  color: var(--color-gold);
+  transform: translateX(-50%) scale(1.08);
 }
 
-.corner-tab-left {
-  left: 20px;
+/* Keep corner-tab class but hidden — referenced by drag exclusion in Book3D.jsx */
+.corner-tab {
+  display: none;
 }
-
-.corner-tab-right {
-  right: 20px;
-}
+.corner-tab-left { display: none; }
+.corner-tab-right { display: none; }
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
@@ -1349,112 +1352,134 @@ body {
 /* ═══════════════════════════════════════════════════
    IDEA 3 — About Me: Typographic-first layout
 ═══════════════════════════════════════════════════ */
-.about-redesign {
-  padding: 32px 30px 28px;
-  gap: 0;
-  justify-content: flex-start;
-}
-
-.about-name-block {
-  margin-bottom: 22px;
-}
-
-.about-label {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-  opacity: 0.75;
-  margin-bottom: 8px;
-}
-
-.about-big-name {
-  font-family: var(--font-serif);
-  font-size: 2.55rem;
-  font-weight: 600;
-  color: var(--color-cover);
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  margin: 0 0 10px 0;
-}
-
-.about-gold-rule {
-  width: 60px;
-  height: 1px;
-  background: var(--color-gold);
-  margin: 10px 0;
-  opacity: 0.65;
-}
-
-.about-role-line {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #6c7a9c;
-  margin: 0;
-}
-
-.about-body-row {
+.about-redesign-card {
+  padding: 30px 20px 20px;
   display: flex;
-  gap: 18px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 20px;
+}
+
+.about-card-frame {
+  width: 430px;
+  height: 530px;
+  border: 1px solid rgba(197, 168, 128, 0.45);
+  border-radius: 12px;
+  background: rgba(250, 246, 232, 0.35);
+  box-shadow: 
+    0 8px 32px rgba(197, 168, 128, 0.08), 
+    0 2px 8px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 24px;
+  gap: 22px;
+}
+
+.about-card-subtitle {
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: var(--color-cover);
+  margin: 0;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* Horizontal row: photo | divider | info */
+.about-card-inner {
+  display: flex;
+  flex-direction: row;
   align-items: flex-start;
-  flex: 1;
+  gap: 0;
+  width: 100%;
 }
 
-.about-photo-wrap {
+.about-card-photo-wrap {
   flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-right: 20px;
+  padding-top: 4px;
+  align-self: flex-start;
+  margin-top: 8px;
 }
 
-.about-photo-angled {
-  width: 105px;
-  height: 140px;
+.about-card-photo {
+  width: 160px;
+  height: 160px;
   object-fit: cover;
+  object-position: top center;
   border-radius: 6px;
-  border: 2px solid rgba(197, 168, 128, 0.4);
-  transform: rotate(-2.5deg);
-  box-shadow: 4px 6px 18px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-gold);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   display: block;
 }
 
-.about-bio-wrap {
+/* Thin vertical gold divider */
+.about-card-divider {
+  width: 1px;
+  background: rgba(197, 168, 128, 0.4);
+  flex-shrink: 0;
+  margin: 4px 0;
+}
+
+/* Right column text */
+.about-card-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  justify-content: center;
+  padding-left: 20px;
+  padding-top: 56px;
+  gap: 10px;
 }
 
-.about-bio-text {
-  font-family: var(--font-sans);
-  font-size: 0.84rem;
-  line-height: 1.65;
-  color: #3e4a68;
+.about-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-cover);
+  letter-spacing: 0.06em;
   margin: 0;
+  line-height: 1.25;
 }
 
-.about-facts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.about-facts-list li {
+.about-card-designation {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  color: #5a6a8a;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.about-fact-dot {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   color: var(--color-gold);
-  font-size: 0.55rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.about-card-bio {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: rgba(28, 45, 96, 0.7);
+  line-height: 1.65;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.about-card-quote {
+  font-family: var(--font-serif);
+  font-size: 0.74rem;
+  font-style: italic;
+  color: rgba(28, 45, 96, 0.55);
+  text-align: center;
+  max-width: 88%;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1489,56 +1514,265 @@ body {
   background: var(--color-gold);
 }
 
-.constellation-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.mindmap-container {
+  position: relative;
   flex: 1;
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
 }
 
-.constellation-group {
+.mindmap-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mindmap-path-bg {
+  transition: stroke 0.3s ease;
+}
+
+.mindmap-path-active {
+  opacity: 0;
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+.mindmap-path-active.active {
+  opacity: 0.8;
+}
+
+.mindmap-hub-wrapper {
+  position: absolute;
+  left: 39%;
+  top: 46%;
+  width: 22%;
+  height: 8%;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px rgba(28, 45, 94, 0.15));
+  pointer-events: auto !important;
+}
+
+.mindmap-hub {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #8c6239;
+  border: 1px solid rgba(90, 60, 30, 0.2);
+  clip-path: polygon(
+    0% 5%, 8% 3%, 16% 6%, 24% 4%, 32% 5%, 40% 3%, 48% 6%, 56% 4%, 64% 5%, 72% 3%, 80% 5%, 88% 3%, 96% 5%, 100% 4%,
+    98% 18%, 100% 35%, 97% 50%, 100% 68%, 98% 85%, 100% 96%,
+    94% 94%, 86% 96%, 78% 94%, 70% 95%, 62% 93%, 54% 96%, 46% 94%, 38% 95%, 30% 93%, 22% 95%, 14% 94%, 6% 95%, 0% 94%,
+    2% 82%, 0% 65%, 3% 50%, 0% 35%, 2% 20%, 0% 8
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 4px 8px;
+}
+
+.hub-label {
+  font-family: var(--font-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin-top: 1px;
+}
+
+.mindmap-card-wrapper {
+  position: absolute;
+  width: 42%;
+  height: 31%;
+  z-index: 3;
+  filter: drop-shadow(0 3px 5px rgba(28, 45, 94, 0.13));
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+              opacity 0.35s ease,
+              filter 0.35s ease;
+  pointer-events: auto !important;
+}
+
+.mindmap-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #fcfbf7;
+  background-image: linear-gradient(rgba(28, 45, 94, 0.01) 1px, transparent 1px);
+  background-size: 100% 12px;
+  border: 1px solid rgba(28, 45, 94, 0.03);
+  clip-path: polygon(
+    2% 2%, 8% 1%, 15% 3%, 22% 1%, 30% 2%, 38% 0%, 45% 2%, 52% 1%, 60% 3%, 68% 1%, 75% 2%, 82% 1%, 90% 3%, 98% 1%,
+    99% 8%, 98% 18%, 100% 28%, 99% 38%, 100% 48%, 98% 58%, 100% 68%, 99% 78%, 100% 88%, 98% 98%,
+    92% 99%, 85% 97%, 78% 99%, 70% 98%, 62% 97%, 55% 99%, 48% 98%, 40% 99%, 32% 97%, 25% 99%, 18% 98%, 10% 99%, 2% 97%,
+    1% 92%, 2% 82%, 0% 72%, 1% 62%, 0% 52%, 2% 42%, 1% 32%, 0% 22%, 2% 12%
+  );
+  padding: 12px 14px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-.constellation-group-header {
+.wrapper-technical {
+  top: 10%;
+  left: 4%;
+  width: 42%;
+  height: 31%;
+}
+
+.wrapper-tools {
+  top: 10%;
+  right: 4%;
+  width: 42%;
+  height: 31%;
+}
+
+.wrapper-soft-skills {
+  bottom: 8%;
+  left: 4%;
+  width: 42%;
+  height: 31%;
+}
+
+.wrapper-languages {
+  bottom: 8%;
+  right: 4%;
+  width: 42%;
+  height: 31%;
+}
+
+/* Category-specific card background tints to match reference image */
+.wrapper-technical .mindmap-card {
+  background-color: #dfe9d8;
+  border: 1px solid rgba(110, 130, 95, 0.25);
+}
+
+.wrapper-tools .mindmap-card {
+  background-color: #f2dede;
+  border: 1px solid rgba(160, 100, 100, 0.25);
+}
+
+.wrapper-soft-skills .mindmap-card {
+  background-color: #d9edf7;
+  border: 1px solid rgba(100, 130, 160, 0.25);
+}
+
+.wrapper-languages .mindmap-card {
+  background-color: #fcf8e3;
+  border: 1px solid rgba(160, 140, 100, 0.25);
+}
+
+.mindmap-card-wrapper:hover,
+.mindmap-card-wrapper.active {
+  transform: translateY(-3px) scale(1.02) rotate(0.4deg);
+  filter: drop-shadow(0 5px 10px rgba(28, 45, 94, 0.18));
+  z-index: 6;
+}
+
+.wrapper-technical:hover .mindmap-card,
+.wrapper-technical.active .mindmap-card {
+  background-color: #e7f0e2;
+  border-color: rgba(110, 130, 95, 0.6);
+}
+
+.wrapper-tools:hover .mindmap-card,
+.wrapper-tools.active .mindmap-card {
+  background-color: #f6e6e6;
+  border-color: rgba(160, 100, 100, 0.6);
+}
+
+.wrapper-soft-skills:hover .mindmap-card,
+.wrapper-soft-skills.active .mindmap-card {
+  background-color: #e3f3fc;
+  border-color: rgba(100, 130, 160, 0.6);
+}
+
+.wrapper-languages:hover .mindmap-card,
+.wrapper-languages.active .mindmap-card {
+  background-color: #fdfbf0;
+  border-color: rgba(160, 140, 100, 0.6);
+}
+
+.wrapper-tools:hover,
+.wrapper-tools.active,
+.wrapper-languages:hover,
+.wrapper-languages.active {
+  transform: translateY(-3px) scale(1.02) rotate(-0.4deg);
+}
+
+.mindmap-card-wrapper.dimmed {
+  opacity: 0.45;
+}
+
+.mindmap-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(28, 45, 94, 0.05);
 }
 
-.constellation-group-label {
+.mindmap-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mindmap-card-title {
   font-family: var(--font-sans);
-  font-size: 0.58rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--color-gold);
+  letter-spacing: 0.15em;
+  color: var(--color-cover);
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
-.constellation-group-line {
+.mindmap-card-content {
   flex: 1;
-  height: 1px;
-  background: rgba(197, 168, 128, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.constellation-dots {
+.mindmap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  padding-left: 4px;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.constellation-dot-item {
+.mindmap-list-two-col {
   display: flex;
-  align-items: flex-start;
-  gap: 5px;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.mindmap-list-two-col .mindmap-list {
+  flex: 1;
+}
+
+.mindmap-list-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: #3e4a68;
-  line-height: 1.3;
+  line-height: 1.25;
+}
+
+.bullet-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2037,5 +2271,28 @@ body {
 .book-page.flipped .page-back {
   z-index: 2 !important;
 }
+
+/* Override 2D flip scaleX animations for the 3D book to avoid perspective parallax gaps */
+.three-page-wrapper .paper-page {
+  transform: scaleX(1) !important;
+}
+
+/* Allow clicks to pass through page backgrounds to the canvas */
+.book-page-html {
+  pointer-events: none !important;
+}
+
+/* Restore interactivity for form fields, buttons, and links */
+.book-page-html input,
+.book-page-html textarea,
+.book-page-html button,
+.book-page-html a,
+.book-page-html .page-number,
+.book-page-html .work-card-minimal,
+.book-page-html .mindmap-card-wrapper,
+.book-page-html .mindmap-hub-wrapper {
+  pointer-events: auto !important;
+}
+
 
 

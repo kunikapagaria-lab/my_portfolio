@@ -12,6 +12,9 @@ const Environment3D = () => {
         angle={0.4}
         penumbra={1}
         intensity={2.5}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-bias={-0.0001}
       />
 
       {/* Point light for subtle warm ambient accents on the book front */}

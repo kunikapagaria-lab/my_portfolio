@@ -8,7 +8,6 @@ import ParallaxStars from './components/ParallaxStars';
 import { BookOpen, Box, Layers } from 'lucide-react';
 import CelestialHeader from './components/CelestialHeader';
 import { JourneyProvider } from './components/JourneyContext';
-import { JourneyConceptSelector } from './components/JourneyMap';
 
 
 function App() {
@@ -122,9 +121,6 @@ function App() {
         <CelestialHeader currentPage={currentPage} goToPage={goToPage} />
       )}
 
-      {/* 3.6. Journey Concept Selector — fixed overlay above all book layers, shown only on Journey spread */}
-      {currentPage === 2 && <JourneyConceptSelector />}
-
       {/* 4. Book Interaction Layer (2D HTML/CSS or 3D WebGL Canvas) */}
       {is3D ? (
         /* 3D WebGL Book View */
@@ -141,6 +137,7 @@ function App() {
           }}
         >
           <Canvas 
+            shadows
             camera={{ position: [0, 0, 20], fov: 42 }}
           >
             <Environment3D />

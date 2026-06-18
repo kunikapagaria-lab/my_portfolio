@@ -33,38 +33,39 @@ const Twitter = ({ size = 20 }) => (
    1. ABOUT ME — Typographic-first layout
 ───────────────────────────────────────────── */
 export const AboutPage = ({ onNext }) => (
-  <div className="paper-page about-redesign">
-    {/* Large typographic name block */}
-    <div className="about-name-block">
-      <p className="about-label">Portfolio · Vol. I</p>
-      <h1 className="about-big-name">KUNIKA<br />PAGARIA</h1>
-      <div className="about-gold-rule" />
-      <p className="about-role-line">AI Assisted Full Stack Developer</p>
+  <div className="paper-page about-redesign-card">
+    <div className="about-card-frame">
+      <p className="about-card-subtitle">INTRODUCTION</p>
+
+      {/* Photo left + Name/Designation right */}
+      <div className="about-card-inner">
+        <div className="about-card-photo-wrap">
+          <img src={kunikaPhoto} alt="Kunika Pagaria" className="about-card-photo" />
+        </div>
+
+        <div className="about-card-info">
+          <h1 className="about-card-title">KUNIKA PAGARIA</h1>
+          <p className="about-card-designation">AI Assisted Developer</p>
+        </div>
+      </div>
+
+      {/* Bio below, full width, centered */}
+      <p className="about-card-bio">
+        Engineering graduate with a strong interest in product development, project management,
+        and technology-driven problem solving. Skilled at turning ideas into practical,
+        user-focused products through fast execution and modern development tools.
+        Comfortable working across both technical and creative workflows, with a focus on
+        building functional, deployment-ready applications. Known for adaptability, quick
+        learning, problem-solving, and working effectively in fast-paced environments.
+      </p>
     </div>
 
-    {/* Photo + punchy bio side by side */}
-    <div className="about-body-row">
-      <div className="about-photo-wrap">
-        <img src={kunikaPhoto} alt="Kunika Pagaria" className="about-photo-angled" />
-      </div>
-      <div className="about-bio-wrap">
-        <p className="about-bio-text">
-          Engineering graduate building products at the intersection of AI and design.
-          Fast executor. Creative thinker. Deployment-ready builder.
-        </p>
-        <ul className="about-facts-list">
-          <li><span className="about-fact-dot">✦</span> B.Tech Engineering</li>
-          <li><span className="about-fact-dot">✦</span> NCC Naval Wing Captain</li>
-          <li><span className="about-fact-dot">✦</span> Full Stack Developer</li>
-          <li><span className="about-fact-dot">✦</span> Kolkata, India</li>
-        </ul>
-      </div>
-    </div>
+    <p className="about-card-quote">
+      "To write is to carve a constellation onto paper. To code is to make it shine."
+    </p>
 
     {onNext && (
-      <span className="corner-tab corner-tab-right" onClick={onNext} style={{ bottom: '15px' }}>
-        Journey &rarr;
-      </span>
+      <div className="page-number" onClick={onNext}>1</div>
     )}
   </div>
 );
@@ -79,73 +80,115 @@ const StarDot = ({ color = 'var(--color-gold)' }) => (
 );
 
 export const SkillsPage = ({ onNext }) => {
-  const groups = [
-    {
+  const [hoveredGroup, setHoveredGroup] = useState(null);
+
+  const groups = {
+    technical: {
       label: 'TECHNICAL',
-      color: '#c5a880',
+      icon: <Cpu size={12} />,
       items: ['Prompt Engineering', 'AI-Assisted Product Dev', 'Deployment & Hosting', 'Debugging & Testing'],
     },
-    {
+    tools: {
       label: 'TOOLS',
-      color: '#7b9cc4',
+      icon: <Code size={12} />,
       items: ['React', 'JavaScript', 'Python', 'HTML · CSS', 'C++', 'Figma', 'GitHub', 'Docker'],
     },
-    {
+    'soft-skills': {
       label: 'SOFT SKILLS',
-      color: '#8b9bbb',
+      icon: <Sparkles size={12} />,
       items: ['Leadership', 'Communication', 'Adaptability', 'Problem Solving', 'Fast Learning'],
     },
-    {
+    languages: {
       label: 'LANGUAGES',
-      color: '#a0a8bf',
-      items: ['English — Professional', 'Hindi — Native', 'Bengali — Conversational'],
+      icon: <Globe size={12} />,
+      items: ['English — Prof.', 'Hindi — Native', 'Bengali — Conv.'],
     },
-  ];
+  };
 
   return (
     <div className="paper-page skills-redesign">
-      <h2 className="page-title-minimal">
-        <Code size={16} className="page-title-icon" /> Skills &amp; Expertise
-      </h2>
-      <div className="constellation-groups">
-        {groups.map((g, i) => (
-          <div key={i} className="constellation-group">
-            <div className="constellation-group-header">
-              <span className="constellation-group-line" />
-              <span className="constellation-group-label">{g.label}</span>
-              <span className="constellation-group-line" />
-            </div>
-            <div className="constellation-dots">
-              {g.items.map((item, j) => (
-                <span key={j} className="constellation-dot-item">
-                  <StarDot color={g.color} />
-                  <span>{item}</span>
-                </span>
-              ))}
-            </div>
+
+      <div className="mindmap-container">
+
+        {/* Central Hub wrapper to handle drop shadow outside clip-path */}
+        <div className="mindmap-hub-wrapper">
+          <div className="mindmap-hub">
+            <span className="hub-label">SKILLS</span>
           </div>
-        ))}
+        </div>
+
+        {/* Category Cards */}
+        {Object.entries(groups).map(([key, g]) => {
+          const isActive = hoveredGroup === key;
+          const isAnyActive = hoveredGroup !== null;
+          return (
+            <div
+              key={key}
+              className={`mindmap-card-wrapper wrapper-${key} ${isActive ? 'active' : ''} ${isAnyActive && !isActive ? 'dimmed' : ''}`}
+              onMouseEnter={() => setHoveredGroup(key)}
+              onMouseLeave={() => setHoveredGroup(null)}
+            >
+              <div className="mindmap-card">
+                <div className="mindmap-card-header">
+                  <span className="mindmap-card-icon" style={{ color: 'var(--color-gold)' }}>{g.icon}</span>
+                  <span className="mindmap-card-title">{g.label}</span>
+                </div>
+                <div className="mindmap-card-content">
+                  {key === 'tools' ? (
+                    <div className="mindmap-list-two-col">
+                      <ul className="mindmap-list">
+                        {g.items.slice(0, 4).map((item, j) => (
+                          <li key={j} className="mindmap-list-item">
+                            <span className="bullet-dot" style={{ backgroundColor: 'var(--color-gold)' }} />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <ul className="mindmap-list">
+                        {g.items.slice(4).map((item, j) => (
+                          <li key={j + 4} className="mindmap-list-item">
+                            <span className="bullet-dot" style={{ backgroundColor: 'var(--color-gold)' }} />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <ul className="mindmap-list">
+                      {g.items.map((item, j) => (
+                        <li key={j} className="mindmap-list-item">
+                          <span className="bullet-dot" style={{ backgroundColor: 'var(--color-gold)' }} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
+
       {onNext && (
-        <span className="corner-tab corner-tab-right" onClick={onNext} style={{ bottom: '15px' }}>
-          Journey &rarr;
-        </span>
+        <div className="page-number" onClick={onNext}>2</div>
       )}
     </div>
   );
 };
+
 
 /* ─────────────────────────────────────────────
    3. JOURNEY — Minimal strip table
 ───────────────────────────────────────────── */
 export const JourneyPage = ({ onPrev, onNext }) => {
   const entries = [
-    { cat: 'Education',   title: 'B.Tech in Engineering' },
-    { cat: 'Leadership',  title: 'NCC Naval Wing Captain' },
+    { cat: 'Education', title: 'B.Tech in Engineering' },
+    { cat: 'Leadership', title: 'NCC Naval Wing Captain' },
     { cat: 'Internships', title: 'Product Development' },
-    { cat: 'Projects',    title: 'AI-Assisted Applications' },
-    { cat: 'Skills',      title: 'AI Debugging & Testing' },
-    { cat: 'Career',      title: 'Full Stack Engineering' },
+    { cat: 'Projects', title: 'AI-Assisted Applications' },
+    { cat: 'Skills', title: 'AI Debugging & Testing' },
+    { cat: 'Career', title: 'Full Stack Engineering' },
   ];
 
   return (
@@ -162,18 +205,8 @@ export const JourneyPage = ({ onPrev, onNext }) => {
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
-        {onPrev && (
-          <span className="corner-tab corner-tab-left" onClick={onPrev} style={{ bottom: '15px' }}>
-            &larr; About
-          </span>
-        )}
-        {onNext && (
-          <span className="corner-tab corner-tab-right" onClick={onNext} style={{ bottom: '15px' }}>
-            Work &rarr;
-          </span>
-        )}
-      </div>
+      {onPrev && <div className="page-number" onClick={onPrev}>3</div>}
+      {onNext && <div className="page-number" onClick={onNext}>4</div>}
     </div>
   );
 };
@@ -181,8 +214,8 @@ export const JourneyPage = ({ onPrev, onNext }) => {
 /* ─────────────────────────────────────────────
    4. WORK — Cards with hover-reveal description
 ───────────────────────────────────────────── */
-export const WorkPage = ({ onPrev, onNext }) => {
-  const projects = [
+export const WorkPage = ({ part = 1, onPrev, onNext }) => {
+  const allProjects = [
     {
       title: 'Stellar Canvas',
       desc: 'Generative astronomical simulator drawing 10 k particle stars with gravity mechanics.',
@@ -204,7 +237,30 @@ export const WorkPage = ({ onPrev, onNext }) => {
       github: '#',
       demo: '#',
     },
+    {
+      title: 'Nebula Shader Engine',
+      desc: 'Procedural raymarching gas simulator mapping audio frequencies to gas density.',
+      tags: ['GLSL', 'WebGL', 'Shaders'],
+      github: '#',
+      demo: '#',
+    },
+    {
+      title: 'Aetheria Synth Node',
+      desc: 'Modular node interface connecting frequency synthesizers with canvas drawings.',
+      tags: ['Web Audio', 'React', 'Canvas'],
+      github: '#',
+      demo: '#',
+    },
+    {
+      title: 'Gravity Well Sim',
+      desc: 'Keplerian orbit solver calculating gravitational vectors for binary star systems.',
+      tags: ['Physics', 'JavaScript', 'Vector Math'],
+      github: '#',
+      demo: '#',
+    },
   ];
+
+  const projects = part === 1 ? allProjects.slice(0, 3) : allProjects.slice(3);
 
   return (
     <div className="paper-page work-redesign">
@@ -232,18 +288,12 @@ export const WorkPage = ({ onPrev, onNext }) => {
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
-        {onPrev && (
-          <span className="corner-tab corner-tab-left" onClick={onPrev}>
-            &larr; Journey
-          </span>
-        )}
-        {onNext && (
-          <span className="corner-tab corner-tab-right" onClick={onNext}>
-            Facts &rarr;
-          </span>
-        )}
-      </div>
+      {onPrev && (
+        <div className="page-number" onClick={onPrev}>{part === 1 ? 5 : 6}</div>
+      )}
+      {onNext && (
+        <div className="page-number" onClick={onNext}>{part === 1 ? 5 : 6}</div>
+      )}
     </div>
   );
 };
@@ -253,15 +303,11 @@ export const WorkPage = ({ onPrev, onNext }) => {
 ───────────────────────────────────────────── */
 export const FunFactsPage = ({ onPrev, onNext }) => {
   const facts = [
-    { title: 'Cadet Captain',   val: 'NCC Naval Wing (2022–2025)',             emoji: '🏅' },
-    { title: 'National Camps',  val: 'RDC 2025 · Ship Attachment · Sailing',   emoji: '🇮🇳' },
-    { title: 'Commendations',   val: 'DG NCC & GOC-IN-C Eastern Command',       emoji: '🎖️' },
-    { title: 'Naval Anchors',   val: 'Leadership, discipline, adventure',       emoji: '⚓' },
-    { title: 'Court & Hoops',   val: 'Competitive basketball tournaments',      emoji: '🏀' },
-    { title: 'Musical Keys',    val: 'Keyboard — distinction honours',          emoji: '🎹' },
-    { title: 'Star Gazer',      val: 'Astronomy camps & stellar coordinates',   emoji: '🌌' },
-    { title: 'Olympiads',       val: 'Mathematics & English Olympiads',         emoji: '🧠' },
-    { title: 'Tech Maker',      val: 'Real-world tools through AI dev',         emoji: '💡' },
+    { title: 'Court & Hoops', val: 'Competitive basketball tournaments', emoji: '🏀' },
+    { title: 'Musical Keys', val: 'Keyboard — distinction honours', emoji: '🎹' },
+    { title: 'Star Gazer', val: 'Astronomy camps & stellar coordinates', emoji: '🌌' },
+    { title: 'Olympiads', val: 'Mathematics & English Olympiads', emoji: '🧠' },
+    { title: 'Tech Maker', val: 'Real-world tools through AI dev', emoji: '💡' },
   ];
 
   return (
@@ -280,18 +326,12 @@ export const FunFactsPage = ({ onPrev, onNext }) => {
           </div>
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto' }}>
-        {onPrev && (
-          <span className="corner-tab corner-tab-left" onClick={onPrev}>
-            &larr; Work
-          </span>
-        )}
-        {onNext && (
-          <span className="corner-tab corner-tab-right" onClick={onNext}>
-            Contact &rarr;
-          </span>
-        )}
-      </div>
+      {onPrev && (
+        <div className="page-number" onClick={onPrev}>7</div>
+      )}
+      {onNext && (
+        <div className="page-number" onClick={onNext}>7</div>
+      )}
     </div>
   );
 };
@@ -299,7 +339,7 @@ export const FunFactsPage = ({ onPrev, onNext }) => {
 /* ─────────────────────────────────────────────
    6. CONTACT — Centered minimal letter form
 ───────────────────────────────────────────── */
-export const ContactPage = ({ onPrev }) => {
+export const ContactPage = ({ onPrev, onNext }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -369,9 +409,10 @@ export const ContactPage = ({ onPrev }) => {
       </div>
 
       {onPrev && (
-        <span className="corner-tab corner-tab-left" onClick={onPrev}>
-          &larr; Facts
-        </span>
+        <div className="page-number" onClick={onPrev}>8</div>
+      )}
+      {onNext && (
+        <div className="page-number" onClick={onNext}>8</div>
       )}
     </div>
   );

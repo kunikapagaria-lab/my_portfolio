@@ -3,9 +3,11 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { AboutPage, SkillsPage, WorkPage, FunFactsPage, ContactPage } from './BookPages';
-import { JourneyLeft, JourneyRight } from './JourneyMap';
+import { JourneyLeft, JourneyRight, THEME } from './JourneyMap';
 import JourneyScene3D from './JourneyScene3D';
+import { useJourney } from './JourneyContext';
 import kunikaPhoto from '../assets/kunika.jpg';
+import coverArt from '../assets/cover_art.png';
 
 // Hinge dimensions
 const PAGE_WIDTH = 4.3;
@@ -21,7 +23,8 @@ const BookSheet3D = ({
   isCover = false,
   frontContent, 
   backContent,
-  zOffset = 0
+  zOffset = 0,
+  pageColor = "#faf6e8"
 }) => {
   const groupRef = useRef();
   const frontWrapperRef = useRef();
@@ -36,12 +39,25 @@ const BookSheet3D = ({
     if (!groupRef.current) return;
 
     // Determine target rotation based on whether current page has flipped past this sheet
-    const targetRotY = currentPage >= index ? -Math.PI : 0;
+    const isOpenBook = currentPage > 0 && currentPage < 5;
+    const targetRotY = currentPage >= index 
+      ? (isOpenBook ? -Math.PI + 0.08 : -Math.PI) 
+      : (isOpenBook ? -0.08 : 0);
     
     // Smoothly interpolate rotation
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y, 
       targetRotY, 
+      6.5 * delta
+    );
+
+    // Determine target Z position: if flipped, invert the zOffset to maintain correct layering.
+    // When the book is open, we scale down the zOffset for internal pages to reduce perspective parallax misalignment.
+    const currentZOffset = (isOpenBook && !isCover) ? zOffset * 0.15 : zOffset;
+    const targetZ = currentPage >= index ? -currentZOffset : currentZOffset;
+    groupRef.current.position.z = THREE.MathUtils.lerp(
+      groupRef.current.position.z,
+      targetZ,
       6.5 * delta
     );
 
@@ -93,26 +109,29 @@ const BookSheet3D = ({
         </mesh>
       ) : (
         // Thin paper page mesh
-        <mesh position={[PAGE_WIDTH / 2, 0, 0]} castShadow receiveShadow>
+        <mesh
+          position={[PAGE_WIDTH / 2, 0, 0]}
+          castShadow={false}
+          receiveShadow={false}
+        >
           <boxGeometry args={[PAGE_WIDTH, PAGE_HEIGHT, thickness]} />
-          <meshStandardMaterial 
-            color="#faf6e8" 
-            roughness={0.9} 
-          />
+          <meshStandardMaterial color={pageColor} roughness={0.9} />
         </mesh>
       )}
 
       {/* Front Face HTML Component */}
       <group position={[index === 1 ? COVER_WIDTH / 2 : PAGE_WIDTH / 2, 0, thickness / 2 + 0.002]}>
-        <Html 
-          transform 
-          pointerEvents="auto"
-          scale={0.34} 
+        <Html
+          transform
+          pointerEvents="none"
+          className="book-page-html"
+          scale={0.34}
           style={{ width: index === 1 ? '524px' : '506px', height: index === 1 ? '706px' : '682px' }}
         >
-          <div 
+          <div
             ref={frontWrapperRef}
             style={{ width: '100%', height: '100%' }}
+            className="three-page-wrapper"
           >
             {frontContent}
           </div>
@@ -120,19 +139,21 @@ const BookSheet3D = ({
       </group>
 
       {/* Back Face HTML Component (Rotated Y by 180 degrees) */}
-      <group 
-        position={[index === 5 ? COVER_WIDTH / 2 : PAGE_WIDTH / 2, 0, -(thickness / 2 + 0.002)]} 
+      <group
+        position={[index === 5 ? COVER_WIDTH / 2 : PAGE_WIDTH / 2, 0, -(thickness / 2 + 0.002)]}
         rotation={[0, Math.PI, 0]}
       >
-        <Html 
-          transform 
-          pointerEvents="auto"
-          scale={0.34} 
+        <Html
+          transform
+          pointerEvents="none"
+          className="book-page-html"
+          scale={0.34}
           style={{ width: index === 5 ? '524px' : '506px', height: index === 5 ? '706px' : '682px' }}
         >
           <div 
             ref={backWrapperRef}
             style={{ width: '100%', height: '100%' }}
+            className="three-page-wrapper"
           >
             {backContent}
           </div>
@@ -151,6 +172,8 @@ const wrapAngle = (angle) => {
 };
 
 const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
+  const { concept } = useJourney();
+  const journeyTheme = THEME[concept];
   const bookGroupRef = useRef();
   const spineRef = useRef();
 
@@ -168,7 +191,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         e.target.closest('button') || 
         e.target.closest('input') || 
         e.target.closest('a') || 
-        e.target.closest('.corner-tab')
+        e.target.closest('.page-number')
       ) return;
       
       isDragging.current = true;
@@ -200,7 +223,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         e.target.closest('button') || 
         e.target.closest('input') || 
         e.target.closest('a') || 
-        e.target.closest('.corner-tab')
+        e.target.closest('.page-number')
       ) return;
       
       isDragging.current = true;
@@ -248,8 +271,8 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         bookGroupRef.current.rotation.y = wrapAngle(bookGroupRef.current.rotation.y);
         bookGroupRef.current.rotation.x = wrapAngle(bookGroupRef.current.rotation.x);
       }
-      targetRotY.current = 0;
-      targetRotXState.current = currentPage === 2 ? 0.45 : 0.18; // Reset to page-specific tilt (Journey tilted more forward!)
+      targetRotY.current = currentPage === 2 ? 0.08 : 0;
+      targetRotXState.current = currentPage === 2 ? -1.10 : 0.18;
     }
   }, [isOpen, currentPage]);
 
@@ -272,11 +295,10 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
     const s = THREE.MathUtils.lerp(bookGroupRef.current.scale.x, targetScale, 5 * delta);
     bookGroupRef.current.scale.set(s, s, s);
 
-    // Adjust limits based on page: Journey page allows wider, deeper tilting to inspect the 3D popups!
     const isJourneyPage = currentPage === 2;
-    const LIMIT_Y = isJourneyPage ? 82 * Math.PI / 180 : 60 * Math.PI / 180; // 82 deg vs 60 deg
-    const DEFAULT_ROT_X = isOpen ? (isJourneyPage ? 0.45 : 0.18) : 0.08; 
-    const LIMIT_X = isJourneyPage ? 38 * Math.PI / 180 : 10 * Math.PI / 180; // 38 deg vs 10 deg
+    const LIMIT_Y = isJourneyPage ? 82 * Math.PI / 180 : 60 * Math.PI / 180;
+    const DEFAULT_ROT_X = isOpen ? (isJourneyPage ? -1.10 : 0.18) : 0.08;
+    const LIMIT_X = isJourneyPage ? 38 * Math.PI / 180 : 10 * Math.PI / 180;
 
     let visibleRotX = targetRotXState.current;
     let visibleRotY = targetRotY.current;
@@ -300,8 +322,8 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
       }
 
       // X-axis (vertical tilt) spring limits
-      const maxRotX = DEFAULT_ROT_X + LIMIT_X;
-      const minRotX = DEFAULT_ROT_X - LIMIT_X;
+      const maxRotX = isJourneyPage ? -0.30 : DEFAULT_ROT_X + LIMIT_X;
+      const minRotX = isJourneyPage ? -1.45 : DEFAULT_ROT_X - LIMIT_X;
 
       if (!isDragging.current) {
         if (targetRotXState.current > maxRotX) {
@@ -361,6 +383,52 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
     }
   };
 
+  const renderDummyPages = () => {
+    const totalDummies = 20;
+    const L = Math.round((currentPage / 5) * totalDummies);
+    const R = totalDummies - L;
+    const dummyPages = [];
+    const isOpen = currentPage > 0 && currentPage < 5;
+
+    // Render Left Stack (flipped pages)
+    for (let i = 0; i < L; i++) {
+      const step = L > 1 ? i / (L - 1) : 0;
+      const zOffset = -0.18 + step * 0.36;
+      const baseRotY = isOpen ? -Math.PI + 0.08 : -Math.PI;
+      const fanOffset = (i - L / 2) * 0.005;
+      const rotY = baseRotY + fanOffset;
+
+      dummyPages.push(
+        <group key={`left-dummy-${i}`} position={[0, 0, zOffset]} rotation={[0, rotY, 0]}>
+          <mesh position={[PAGE_WIDTH / 2, 0, 0]}>
+            <boxGeometry args={[PAGE_WIDTH, PAGE_HEIGHT, 0.005]} />
+            <meshStandardMaterial color="#faf6e8" roughness={0.9} />
+          </mesh>
+        </group>
+      );
+    }
+
+    // Render Right Stack (unflipped pages)
+    for (let j = 0; j < R; j++) {
+      const step = R > 1 ? j / (R - 1) : 0;
+      const zOffset = -0.18 + step * 0.36;
+      const baseRotY = isOpen ? -0.08 : 0;
+      const fanOffset = (j - R / 2) * 0.005;
+      const rotY = baseRotY - fanOffset;
+
+      dummyPages.push(
+        <group key={`right-dummy-${j}`} position={[0, 0, zOffset]} rotation={[0, rotY, 0]}>
+          <mesh position={[PAGE_WIDTH / 2, 0, 0]}>
+            <boxGeometry args={[PAGE_WIDTH, PAGE_HEIGHT, 0.005]} />
+            <meshStandardMaterial color="#faf6e8" roughness={0.9} />
+          </mesh>
+        </group>
+      );
+    }
+
+    return dummyPages;
+  };
+
   return (
     // Entire book model centered around spine Y-axis
     <group 
@@ -380,6 +448,9 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         />
       </mesh>
 
+      {/* Dynamic stack of fanned dummy pages */}
+      {renderDummyPages()}
+
       {/* Dynamic stack of 5 sheets */}
       
       {/* ================= SHEET 1: FRONT COVER / INSIDE LEFT ================= */}
@@ -390,190 +461,21 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         isCover={true}
         zOffset={0.20}
         frontContent={
-          <div 
-            className="page-side page-front cover-front" 
-            style={{ width: '524px', height: '706px', margin: 0, cursor: 'pointer' }}
+          <div
+            className="page-side page-front cover-front"
+            style={{ width: '524px', height: '706px', margin: 0, cursor: 'pointer', padding: 0, overflow: 'hidden', position: 'relative' }}
             onClick={() => goToPage(1)}
           >
-            {/* Elegant Double Gold Border */}
-            <div className="cover-border-outer">
-              <div className="cover-border-inner"></div>
-            </div>
-
-            {/* Glowing Turtle Cover Art */}
-            <div className="cover-fairy" style={{ width: '80px', height: '80px', top: 'auto', bottom: '150px', right: '80px' }}>
-              <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g transform="rotate(-12, 60, 60)">
-                  {/* Background Back Flipper */}
-                  <path 
-                    d="M 41 66 C 37 73, 33 80, 28 83 C 26 84, 23 83, 24 79 C 26 73, 31 69, 36 66" 
-                    stroke="white" 
-                    strokeWidth="1.2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    opacity="0.4" 
-                  />
-
-                  {/* Background Front Flipper */}
-                  <path 
-                    d="M 78 64 C 81 72, 82 80, 78 85 C 75 88, 72 88, 71 83 C 70 76, 72 70, 75 65" 
-                    stroke="white" 
-                    strokeWidth="1.2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    opacity="0.4" 
-                  />
-
-                  {/* Tail */}
-                  <path 
-                    d="M 35 66 Q 28 67, 24 69 C 25 71, 28 71, 33 68" 
-                    stroke="white" 
-                    strokeWidth="1.8" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                  />
-
-                  {/* Belly line */}
-                  <path 
-                    d="M 42 67 C 48 70, 70 70, 76 67" 
-                    stroke="white" 
-                    strokeWidth="1.6" 
-                    strokeLinecap="round" 
-                    opacity="0.8" 
-                  />
-
-                  {/* Head and Neck (Sleek and cute) */}
-                  <path 
-                    d="M 78 57 C 84 56, 88 50, 93 50 C 98 50, 102 52, 102 56 C 102 59, 99 61, 95 61 C 88 61, 83 65, 80 70" 
-                    stroke="white" 
-                    strokeWidth="2.0" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                  />
-
-                  {/* Smile */}
-                  <path 
-                    d="M 97 57 C 98 59, 100 59, 101 57" 
-                    stroke="white" 
-                    strokeWidth="1.2" 
-                    strokeLinecap="round" 
-                  />
-
-                  {/* Chibi Shiny Eye */}
-                  <circle cx="95" cy="54" r="2.5" stroke="white" strokeWidth="1.2" fill="none" />
-                  <circle cx="94.2" cy="53.2" r="0.8" fill="white" />
-                  <circle cx="95.8" cy="54.8" r="0.4" fill="white" />
-
-                  {/* Foreground Back Flipper */}
-                  <path 
-                    d="M 45 68 C 42 76, 37 84, 32 87 C 29 89, 26 87, 27 82 C 29 76, 35 71, 40 68" 
-                    stroke="white" 
-                    strokeWidth="2.0" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                  />
-
-                  {/* Foreground Front Flipper */}
-                  <path 
-                    d="M 75 66 C 78 75, 79 85, 74 91 C 71 94, 67 94, 66 89 C 65 80, 68 73, 72 67" 
-                    stroke="white" 
-                    strokeWidth="2.0" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                  />
-
-                  {/* Shell Carapace (Outer dome) */}
-                  <path 
-                    d="M 35 65 C 35 42, 85 42, 85 65 Z" 
-                    stroke="white" 
-                    strokeWidth="2.2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    fill="rgba(255, 255, 255, 0.12)" 
-                  />
-
-                  {/* Shell Rim (Thick lip) */}
-                  <path 
-                    d="M 33 66 C 33 68, 87 68, 87 66 C 87 64, 33 64, 33 66 Z" 
-                    stroke="white" 
-                    strokeWidth="1.8" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    fill="rgba(255, 255, 255, 0.2)" 
-                  />
-
-                  {/* Constellation lines inside Shell */}
-                  <path 
-                    d="M 48 51 L 56 59 L 64 49 L 74 57" 
-                    stroke="white" 
-                    strokeWidth="0.8" 
-                    strokeDasharray="2,3" 
-                    opacity="0.7" 
-                  />
-
-                  {/* Constellation Stars */}
-                  {/* Star A (large) */}
-                  <path d="M 48 48.5 L 49.2 50 L 51.5 51 L 49.2 52 L 48 53.5 L 46.8 52 L 44.5 51 L 46.8 50 Z" fill="white" opacity="0.95" />
-                  {/* Star B (small) */}
-                  <path d="M 56 57 L 56.8 58.2 L 58 59 L 56.8 59.8 L 56 61 L 55.2 59.8 L 54 59 L 55.2 58.2 Z" fill="white" opacity="0.9" />
-                  {/* Star C (large) */}
-                  <path d="M 64 46.5 L 65.2 48 L 67.5 49 L 65.2 50 L 64 51.5 L 62.8 50 L 60.5 49 L 62.8 48 Z" fill="white" opacity="0.95" />
-                  {/* Star D (small) */}
-                  <path d="M 74 55 L 74.8 56.2 L 76 57 L 74.8 57.8 L 74 59 L 73.2 57.8 L 72 57 L 73.2 56.2 Z" fill="white" opacity="0.9" />
-
-                  {/* Ambient starry dots */}
-                  <circle cx="44" cy="58" r="0.6" fill="white" opacity="0.5" />
-                  <circle cx="58" cy="46" r="0.6" fill="white" opacity="0.5" />
-                  <circle cx="68" cy="56" r="0.6" fill="white" opacity="0.5" />
-                  <circle cx="78" cy="48" r="0.6" fill="white" opacity="0.5" />
-
-                  {/* Sparkle Trail */}
-                  {/* Sparkle 1 */}
-                  <path d="M 25 45 L 26 47.2 L 28.2 48 L 26 48.8 L 25 51 L 24 48.8 L 21.8 48 L 24 47.2 Z" fill="white" opacity="0.8" />
-                  {/* Sparkle 2 */}
-                  <path d="M 18 55.5 L 18.8 57.2 L 20.5 58 L 18.8 58.8 L 18 60.5 L 17.2 58.8 L 15.5 58 L 17.2 57.2 Z" fill="white" opacity="0.6" />
-                  {/* Sparkle 3 */}
-                  <path d="M 29 71.5 L 29.8 73.2 L 31.5 74 L 29.8 74.8 L 29 76.5 L 28.2 74.8 L 26.5 74 L 28.2 73.2 Z" fill="white" opacity="0.7" />
-                </g>
-              </svg>
-            </div>
-
-            {/* Elegant Moon & Stars background behind title */}
-            <div className="cover-moon">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M30 20C55 20 75 40 75 65C75 78 70 90 60 97C78 90 90 72 90 52C90 27 70 7 45 7C39 7 34 8 30 20Z" fill="rgba(197, 168, 128, 0.08)" stroke="var(--color-gold)" strokeWidth="1" style={{ opacity: 0.65 }}/>
-                <circle cx="45" cy="40" r="1" fill="#fff" opacity="0.6" className="pulse-star" />
-                <circle cx="58" cy="28" r="0.8" fill="#fff" opacity="0.4" />
-                <circle cx="35" cy="60" r="1" fill="var(--color-gold)" opacity="0.5" />
-              </svg>
-            </div>
-
-            <div className="cover-header">Portfolio</div>
-            
-            <div className="cover-title-container">
-              <h1 className="cover-horizontal-title">
-                <span className="horizontal-word">KUNIKA</span>
-                <span className="cover-horizontal-line"></span>
-                <span className="horizontal-word">PAGARIA</span>
-              </h1>
-              <div className="cover-subtitle">AI Assisted Developer</div>
-            </div>
-
-            {/* Stardust trail drawing */}
-            <div style={{ position: 'absolute', bottom: '28%', right: '22%', width: '40%', opacity: 0.55 }}>
-              <svg viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M90 10C80 40 20 50 50 90C70 120 10 130 30 150" stroke="rgba(197,168,128,0.35)" strokeWidth="1" strokeDasharray="3 3"/>
-                <circle cx="90" cy="10" r="1.5" fill="white"/>
-                <circle cx="80" cy="30" r="2.5" fill="white" style={{ opacity: 0.8 }}/>
-                <circle cx="60" cy="45" r="1" fill="white"/>
-                <circle cx="35" cy="50" r="2" fill="white"/>
-                <circle cx="25" cy="65" r="3" fill="#c5a880" style={{ filter: 'drop-shadow(0 0 4px #fff)' }}/>
-                <circle cx="45" cy="80" r="1.5" fill="white"/>
-                <circle cx="55" cy="95" r="2" fill="white"/>
-                <circle cx="40" cy="110" r="1" fill="white"/>
-                <circle cx="20" cy="122" r="2.5" fill="white"/>
-                <circle cx="30" cy="140" r="1.5" fill="white"/>
-              </svg>
+            {/* Full-bleed cover illustration */}
+            <img
+              src={coverArt}
+              alt="Cover Art"
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+            />
+            {/* Bottom gradient + title overlay */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(35,15,25,0.82))', padding: '50px 32px 32px', textAlign: 'center' }}>
+              <h1 style={{ color: '#fce8e8', fontFamily: 'Georgia,serif', fontSize: '26px', letterSpacing: '0.18em', fontWeight: 700, margin: 0 }}>KUNIKA PAGARIA</h1>
+              <div style={{ color: '#e8b4c0', fontFamily: 'Georgia,serif', fontSize: '12px', letterSpacing: '0.14em', marginTop: '8px' }}>AI Assisted Developer</div>
             </div>
           </div>
         }
@@ -594,6 +496,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         currentPage={currentPage}
         handlePageTurn={handlePageTurn}
         zOffset={0.10}
+        pageColor="#faf6e8"
         frontContent={
           <div className="page-side page-front" style={{ width: '506px', height: '682px', margin: 0 }}>
             <SkillsPage 
@@ -607,6 +510,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
           <div className="page-side page-back" style={{ width: '506px', height: '682px', margin: 0 }}>
             <JourneyLeft 
               onPrev={(e) => handlePageTurn('prev', e)} 
+              is3D={true}
             />
           </div>
         }
@@ -618,16 +522,19 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         currentPage={currentPage}
         handlePageTurn={handlePageTurn}
         zOffset={0.0}
+        pageColor="#faf6e8"
         frontContent={
           <div className="page-side page-front" style={{ width: '506px', height: '682px', margin: 0 }}>
             <JourneyRight 
               onNext={(e) => handlePageTurn('next', e)} 
+              is3D={true}
             />
           </div>
         }
         backContent={
           <div className="page-side page-back" style={{ width: '506px', height: '682px', margin: 0 }}>
             <WorkPage 
+              part={1}
               currentPage={currentPage}
               goToPage={goToPage}
               onPrev={(e) => handlePageTurn('prev', e)} 
@@ -636,7 +543,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         }
       />
 
-      {/* ================= SHEET 4: FUN FACTS / CONTACT ================= */}
+      {/* ================= SHEET 4: WORK PART 2 / FUN FACTS ================= */}
       <BookSheet3D
         index={4}
         currentPage={currentPage}
@@ -644,7 +551,8 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         zOffset={-0.10}
         frontContent={
           <div className="page-side page-front" style={{ width: '506px', height: '682px', margin: 0 }}>
-            <FunFactsPage 
+            <WorkPage 
+              part={2}
               currentPage={currentPage}
               goToPage={goToPage}
               onNext={(e) => handlePageTurn('next', e)} 
@@ -653,7 +561,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         }
         backContent={
           <div className="page-side page-back" style={{ width: '506px', height: '682px', margin: 0 }}>
-            <ContactPage 
+            <FunFactsPage 
               currentPage={currentPage}
               goToPage={goToPage}
               onPrev={(e) => handlePageTurn('prev', e)} 
@@ -662,7 +570,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         }
       />
 
-      {/* ================= SHEET 5: FINIS / BACK COVER ================= */}
+      {/* ================= SHEET 5: CONTACT / BACK COVER ================= */}
       <BookSheet3D
         index={5}
         currentPage={currentPage}
@@ -671,17 +579,11 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
         zOffset={-0.20}
         frontContent={
           <div className="page-side page-front" style={{ width: '506px', height: '682px', margin: 0 }}>
-            <div className="paper-page" style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-              <div style={{ textAlign: 'center', opacity: 0.4 }}>
-                <div style={{ fontSize: '2.5rem', color: 'var(--color-gold)', marginBottom: '10px' }}>❦</div>
-                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '0.85rem', letterSpacing: '0.1em' }}>Finis</p>
-              </div>
-              {currentPage === 4 && (
-                <span className="corner-tab corner-tab-right" onClick={(e) => handlePageTurn('next', e)}>
-                  Close Cover &rarr;
-                </span>
-              )}
-            </div>
+            <ContactPage 
+              currentPage={currentPage}
+              goToPage={goToPage}
+              onNext={(e) => handlePageTurn('next', e)} 
+            />
           </div>
         }
         backContent={
@@ -706,19 +608,18 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage }) => {
               Designed underneath the twilight sky.
             </div>
             {currentPage === 5 && (
-              <span 
-                className="corner-tab corner-tab-left" 
-                style={{ bottom: '25px', left: '25px' }} 
+              <div
+                style={{ marginTop: '16px', fontSize: '0.72rem', color: 'rgba(197,168,128,0.7)', letterSpacing: '0.12em', cursor: 'pointer', fontFamily: 'var(--font-serif)' }}
                 onClick={(e) => goToPage(4)}
               >
-                &larr; Reopen
-              </span>
+                ↩ Reopen
+              </div>
             )}
           </div>
         }
       />
 
-      {/* ═══════ 3D JOURNEY SCENE — floats above the open pages ═══════ */}
+      {/* ═══════ 3D JOURNEY SCENE ═══════ */}
       {currentPage === 2 && isOpen && <JourneyScene3D />}
 
     </group>
