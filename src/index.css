@@ -1842,6 +1842,226 @@ body {
   gap: 0;
 }
 
+/* ── Work page editorial layout ── */
+.work-alt-layout {
+  padding: 28px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.work-editorial-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  gap: 0;
+}
+
+.work-editorial-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(197,168,128,0.2);
+  flex: 1;
+}
+
+.work-editorial-item:last-child {
+  border-bottom: none;
+}
+
+.work-editorial-flip {
+  flex-direction: row-reverse;
+}
+
+.work-editorial-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.work-editorial-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--color-navy);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.work-editorial-desc {
+  font-family: var(--font-sans);
+  font-size: 0.73rem;
+  color: var(--color-muted, #6b7a9a);
+  line-height: 1.65;
+  margin: 0;
+  text-align: justify;
+}
+
+.work-editorial-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.work-editorial-img {
+  width: 52%;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(197,168,128,0.07);
+  border: 1px solid rgba(197,168,128,0.3);
+}
+
+.work-editorial-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.work-editorial-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(197,168,128,0.15) 0%, rgba(197,168,128,0.04) 100%);
+}
+
+
+
+.work-alt-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+  margin-bottom: 22px;
+  opacity: 0.85;
+}
+
+.work-alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.work-alt-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(197,168,128,0.4), transparent);
+  margin: 20px 0;
+}
+
+.work-alt-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.work-alt-reverse {
+  flex-direction: row-reverse;
+}
+
+.work-alt-img-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.work-alt-reverse .work-alt-img-col {
+  align-items: flex-end;
+}
+
+.work-alt-img-box {
+  width: 175px;
+  height: 160px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(197,168,128,0.55);
+  background: rgba(197,168,128,0.07);
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(16,48,85,0.08);
+}
+
+.work-alt-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(197,168,128,0.15) 0%, rgba(197,168,128,0.04) 100%);
+}
+
+.work-alt-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  max-width: 175px;
+}
+
+.work-alt-tag {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-gold);
+  border: 1px solid rgba(197,168,128,0.5);
+  border-radius: 4px;
+  padding: 3px 7px;
+  background: rgba(197,168,128,0.07);
+  white-space: nowrap;
+}
+
+.work-alt-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.work-alt-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 8px 0;
+  line-height: 1.25;
+}
+
+.work-alt-desc {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-muted, #6b7a9a);
+  line-height: 1.65;
+  margin: 0 0 12px 0;
+}
+
+.work-alt-links {
+  display: flex;
+  gap: 10px;
+  color: var(--color-gold);
+}
+
+.work-alt-links a {
+  color: var(--color-gold);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.work-alt-links a:hover {
+  opacity: 1;
+}
+
 .work-cards-minimal {
   display: flex;
   flex-direction: column;
@@ -1945,85 +2165,174 @@ body {
   gap: 0;
 }
 
-.facts-grid-minimal {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 12px;
-  flex: 1;
-  margin-top: 4px;
+.funfacts-page {
+  padding: 28px 26px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-.fact-item-minimal {
+.funfacts-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-navy);
+  margin-bottom: 18px;
+  opacity: 0.85;
+}
+
+.funfacts-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.funfact-row {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 8px 9px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(28, 45, 94, 0.07);
-  transition: background 0.2s;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(197,168,128,0.18);
 }
 
-.fact-item-minimal:hover {
-  background: rgba(197, 168, 128, 0.08);
+.funfact-row:last-child {
+  border-bottom: none;
 }
 
-.fact-emoji-minimal {
-  font-size: 1.1rem;
-  line-height: 1;
+.funfact-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   flex-shrink: 0;
+  width: 36px;
 }
 
-.fact-name-minimal {
+.funfact-num {
   font-family: var(--font-sans);
-  font-size: 0.67rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  color: var(--color-cover);
-  letter-spacing: 0.03em;
-  margin-bottom: 2px;
+  color: var(--color-gold);
+  letter-spacing: 0.08em;
+  opacity: 0.8;
 }
 
-.fact-val-minimal {
+.funfact-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.funfact-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.funfact-title {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.funfact-desc {
   font-family: var(--font-sans);
-  font-size: 0.62rem;
-  color: #6c7a9c;
-  line-height: 1.4;
+  font-size: 0.7rem;
+  color: var(--color-muted, #6b7a9a);
+  line-height: 1.55;
 }
 
 /* ═══════════════════════════════════════════════════
-   IDEA 7 — Contact: Centered minimal letter form
+   Contact: Write to Me
 ═══════════════════════════════════════════════════ */
-.contact-redesign {
-  padding: 32px 30px 28px;
-  gap: 0;
-  align-items: center;
-}
-
-.contact-redesign .page-title-minimal {
-  width: 100%;
-}
-
-.contact-form-minimal {
+.contact-page {
+  padding: 28px 28px 22px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 88%;
-  margin: 8px auto 0;
+  height: 100%;
+  overflow: hidden;
 }
 
+.contact-page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-cover);
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+.contact-page-header svg {
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* label wraps span + input/textarea — clicking anywhere focuses the field */
 .contact-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  padding: 9px 13px 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(197, 168, 128, 0.28);
+  border-radius: 10px;
+  cursor: text;
+  transition: background 0.18s, border-color 0.18s;
+  flex-shrink: 0;
 }
 
-.contact-field label {
+.contact-field:hover {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(197, 168, 128, 0.6);
+}
+
+.contact-field:focus-within {
+  background: #fff;
+  border-color: var(--color-gold);
+}
+
+.contact-field-message {
+  flex: 1;
+  min-height: 0;
+}
+
+.contact-field-message textarea {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+}
+
+.contact-field-label {
   font-family: var(--font-sans);
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-gold);
+  user-select: none;
 }
 
 .contact-field input,
@@ -2031,105 +2340,112 @@ body {
   font-family: var(--font-sans);
   font-size: 0.82rem;
   color: var(--color-cover);
-  background: rgba(255, 255, 255, 0.6);
+  background: none;
   border: none;
-  border-bottom: 1px solid rgba(28, 45, 94, 0.18);
-  padding: 5px 0;
   outline: none;
-  transition: border-color 0.2s;
+  padding: 0;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .contact-field input::placeholder,
 .contact-field textarea::placeholder {
   color: rgba(28, 45, 94, 0.3);
+  font-style: italic;
 }
 
-.contact-field input:focus,
-.contact-field textarea:focus {
-  border-bottom-color: var(--color-gold);
-}
-
-.contact-send-btn {
+.contact-submit {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 4px;
-  padding: 9px 0;
-  border: 1px solid var(--color-cover);
-  border-radius: 4px;
+  gap: 7px;
+  padding: 11px 0;
+  width: 100%;
   background: var(--color-cover);
+  border: 1.5px solid var(--color-cover);
+  border-radius: 8px;
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
 }
 
-.contact-send-btn:hover {
+.contact-submit:hover {
   background: transparent;
   color: var(--color-cover);
 }
 
-.contact-send-btn:disabled {
+.contact-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.contact-success {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex: 1;
-  text-align: center;
-}
-
-.contact-success-text {
-  font-family: var(--font-serif);
-  font-size: 0.9rem;
-  color: var(--color-cover);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.contact-resend-btn {
-  background: none;
-  border: 1px solid var(--color-gold);
-  color: var(--color-gold);
-  padding: 6px 16px;
-  border-radius: 4px;
+.contact-form-error {
   font-family: var(--font-sans);
-  font-size: 0.72rem;
-  cursor: pointer;
-  letter-spacing: 0.08em;
-  transition: background 0.2s;
+  font-size: 0.65rem;
+  color: #c0392b;
+  margin: 0;
+  flex-shrink: 0;
 }
 
-.contact-resend-btn:hover {
-  background: rgba(197, 168, 128, 0.1);
-}
-
-.contact-socials-minimal {
+.contact-socials {
   display: flex;
-  gap: 16px;
-  margin-top: 16px;
+  gap: 18px;
+  justify-content: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(197, 168, 128, 0.22);
+  flex-shrink: 0;
 }
 
-.contact-socials-minimal a {
-  color: #8b9bbb;
+.contact-socials a {
+  color: rgba(28, 45, 94, 0.38);
   display: flex;
   align-items: center;
   transition: color 0.2s;
 }
 
-.contact-socials-minimal a:hover {
+.contact-socials a:hover {
   color: var(--color-cover);
+}
+
+.contact-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex: 1;
+  text-align: center;
+}
+
+.contact-sent-text {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  color: var(--color-cover);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.contact-again-btn {
+  background: none;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  padding: 7px 18px;
+  border-radius: 5px;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: background 0.2s;
+}
+
+.contact-again-btn:hover {
+  background: rgba(197, 168, 128, 0.12);
 }
 
 /* ==========================================================================
@@ -2287,12 +2603,46 @@ body {
 .book-page-html textarea,
 .book-page-html button,
 .book-page-html a,
+.book-page-html label,
+.book-page-html .contact-field,
+.book-page-html .contact-field-label,
+.book-page-html .contact-form,
+.book-page-html .contact-socials,
 .book-page-html .page-number,
 .book-page-html .work-card-minimal,
 .book-page-html .mindmap-card-wrapper,
 .book-page-html .mindmap-hub-wrapper {
   pointer-events: auto !important;
 }
+
+/* Running Header styles for printed book aesthetic */
+.running-header {
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  right: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.running-header-text {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(28, 45, 94, 0.45);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.running-header-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent 0%, rgba(28, 45, 94, 0.12) 20%, rgba(28, 45, 94, 0.12) 80%, transparent 100%);
+}
+
 
 
 

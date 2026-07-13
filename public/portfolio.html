@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kunika Pagaria — CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy:   #1c2d5e;
+      --navy-lt:#2e4080;
+      --gold:   #c5a880;
+      --paper:  #fdfaf0;
+      --rule:   #e0d8c8;
+      --ink:    #2c3e50;
+      --ink-lt: #6c7a9c;
+      --serif:  'Playfair Display', Georgia, serif;
+      --sans:   'Outfit', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: var(--paper);
+      font-family: var(--sans);
+      color: var(--ink);
+      font-size: 17px;
+    }
+
+    /* ══════════════════════════════
+       OUTER SHELL
+    ══════════════════════════════ */
+    .cv {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
+    .cv-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 18px 36px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .cv-initials {
+      width: 52px; height: 52px;
+      border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 1.2rem; font-weight: 700;
+      color: var(--gold); flex-shrink: 0;
+      background: rgba(255,255,255,.05);
+    }
+
+    .cv-header-photo {
+      width: 52px; height: 52px;
+      object-fit: cover; object-position: top center;
+      border: 2px solid var(--gold); flex-shrink: 0;
+    }
+
+    .cv-header-text { flex: 1; }
+
+    .cv-name {
+      font-family: var(--serif);
+      font-size: 2rem; font-weight: 700;
+      letter-spacing: .06em; line-height: 1;
+      color: #fff;
+    }
+
+    .cv-title {
+      font-size: .82rem; font-weight: 400; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gold);
+      margin-top: 5px;
+    }
+
+    .cv-contact-line {
+      font-size: .78rem; color: rgba(255,255,255,.55);
+      margin-top: 6px; letter-spacing: .02em;
+    }
+    .cv-contact-line span { margin: 0 6px; opacity: .4; }
+
+    /* ══════════════════════════════
+       BODY — two columns
+    ══════════════════════════════ */
+    .cv-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* LEFT — main content */
+    .cv-left {
+      flex: 1;
+      padding: 20px 28px 16px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+      border-right: 1px solid var(--rule);
+    }
+
+    /* RIGHT — sidebar */
+    .cv-right {
+      width: 310px;
+      flex-shrink: 0;
+      padding: 20px 24px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+      background: rgba(197,168,128,.04);
+    }
+
+    /* ── Section ──────────────────── */
+    .sec { margin-bottom: 14px; }
+    .sec:last-child { margin-bottom: 0; flex: 1; display: flex; flex-direction: column; }
+
+    .sec-label {
+      font-family: var(--sans);
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--navy); margin-bottom: 5px;
+    }
+
+    .sec-rule {
+      height: 1px; background: var(--rule);
+      margin-bottom: 8px; position: relative;
+    }
+    .sec-rule::before {
+      content: ''; position: absolute;
+      left: 0; top: 0; width: 32px; height: 1px;
+      background: var(--gold);
+    }
+
+    /* ── Summary ──────────────────── */
+    .summary-text {
+      font-size: .88rem; line-height: 1.7; color: #3e4a68;
+    }
+
+    /* ── Journey / Experience ─────── */
+    .exp-item { margin-bottom: 10px; }
+    .exp-item:last-child { margin-bottom: 0; }
+
+    .exp-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 8px;
+    }
+
+    .exp-title {
+      font-family: var(--serif); font-size: 1rem; font-weight: 600;
+      color: var(--navy); line-height: 1.2;
+    }
+
+    .exp-date {
+      font-size: .76rem; font-weight: 500; color: var(--ink-lt);
+      white-space: nowrap; flex-shrink: 0;
+      letter-spacing: .04em;
+    }
+
+    .exp-org {
+      font-size: .8rem; color: var(--ink-lt);
+      margin: 2px 0 5px;
+    }
+
+    .exp-bullets {
+      list-style: none; display: flex; flex-direction: column; gap: 3px;
+    }
+    .exp-bullets li {
+      font-size: .83rem; line-height: 1.55; color: #3e4a68;
+      padding-left: 14px; position: relative;
+    }
+    .exp-bullets li::before {
+      content: '•'; position: absolute; left: 0;
+      color: var(--gold); font-size: .8rem; line-height: 1.4;
+    }
+
+    /* ── Skills ───────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 10px;
+    }
+    .skill-item {
+      font-size: .83rem; color: #3e4a68;
+      padding-left: 12px; position: relative; line-height: 1.55;
+      white-space: normal;
+    }
+    .skill-item::before {
+      content: '•'; position: absolute; left: 0;
+      color: var(--gold); font-size: .8rem; line-height: 1.5;
+    }
+
+    /* ── Languages ────────────────── */
+    .lang-item { margin-bottom: 8px; }
+    .lang-item:last-child { margin-bottom: 0; }
+
+    .lang-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 3px;
+    }
+    .lang-name { font-size: .85rem; font-weight: 600; color: var(--navy); }
+    .lang-level { font-size: .73rem; color: var(--ink-lt); }
+
+    .lang-bar {
+      height: 3px; background: var(--rule);
+      border-radius: 2px; overflow: hidden;
+    }
+    .lang-fill {
+      height: 100%; background: var(--gold);
+      border-radius: 2px;
+    }
+
+    /* ── Contact (sidebar) ────────── */
+    .contact-block { display: flex; flex-direction: column; gap: 6px; }
+    .contact-row {
+      display: flex; align-items: flex-start; gap: 7px;
+    }
+    .contact-icon {
+      width: 14px; flex-shrink: 0; color: var(--gold);
+      margin-top: 1px;
+    }
+    .contact-icon svg { width: 13px; height: 13px; }
+    .contact-val {
+      font-size: .82rem; color: #3e4a68; line-height: 1.5;
+      word-break: break-all;
+    }
+
+    /* ── Extras chips (sidebar) ───── */
+    .extras-chips {
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+    .echip {
+      font-size: .72rem; font-weight: 500; letter-spacing: .03em;
+      color: var(--navy); background: rgba(28,45,94,.07);
+      border: 1px solid rgba(28,45,94,.12);
+      padding: 2px 7px; border-radius: 3px;
+    }
+
+    /* ── Editable regions ─────────────────── */
+    [contenteditable] { outline: none; }
+
+    [contenteditable]:hover {
+      background: rgba(197,168,128,.08);
+      border-radius: 4px;
+      cursor: text;
+    }
+
+    [contenteditable]:focus {
+      background: rgba(197,168,128,.13);
+      border-radius: 4px;
+      box-shadow: 0 0 0 1.5px rgba(197,168,128,.5);
+    }
+
+    /* header region has dark bg so use lighter highlight */
+    .cv-header-text[contenteditable]:hover {
+      background: rgba(255,255,255,.08);
+    }
+    .cv-header-text[contenteditable]:focus {
+      background: rgba(255,255,255,.12);
+      box-shadow: 0 0 0 1.5px rgba(197,168,128,.6);
+    }
+
+    /* edit hint badge */
+    .edit-hint {
+      position: fixed; bottom: 14px; right: 18px;
+      font-family: var(--sans); font-size: .65rem; font-weight: 500;
+      color: rgba(28,45,94,.4); letter-spacing: .06em;
+      pointer-events: none; user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="cv">
+
+  <!-- ── HEADER ───────────────────── -->
+  <header class="cv-header">
+    <img src="/src/assets/kunika.jpg" alt="KP" class="cv-header-photo"
+         onerror="this.outerHTML='<div class=cv-initials>KP</div>'" />
+    <div class="cv-header-text" contenteditable="true" spellcheck="false">
+      <div class="cv-name">KUNIKA PAGARIA</div>
+      <div class="cv-title">AI Assisted Developer</div>
+      <div class="cv-contact-line">
+        Kolkata, India
+        <span>/</span>
+        kunikapagaria@gmail.com
+        <span>/</span>
+        github.com/kunikapagaria
+      </div>
+    </div>
+  </header>
+
+  <!-- ── BODY ─────────────────────── -->
+  <div class="cv-body">
+
+    <!-- LEFT COLUMN -->
+    <div class="cv-left" contenteditable="true" spellcheck="false">
+
+      <!-- Summary -->
+      <div class="sec">
+        <div class="sec-label">Bio</div>
+        <div class="sec-rule"></div>
+        <p class="summary-text">
+          Engineering graduate with a strong interest in product development, project management, and technology-driven
+          problem solving. Skilled at turning ideas into practical, user-focused products through fast execution and
+          modern AI-assisted development tools. Comfortable working across both technical and creative workflows,
+          with a focus on building functional, deployment-ready applications.
+        </p>
+      </div>
+
+      <!-- Journey -->
+      <div class="sec">
+        <div class="sec-label">Journey</div>
+        <div class="sec-rule"></div>
+
+        <div class="exp-item">
+          <div class="exp-row">
+            <span class="exp-title">Class X (ICSE)</span>
+            <span class="exp-date">2019</span>
+          </div>
+          <div class="exp-org">Newtown School · Kolkata &nbsp;·&nbsp; 90%</div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-row">
+            <span class="exp-title">Class XII — Science (ISC)</span>
+            <span class="exp-date">2021</span>
+          </div>
+          <div class="exp-org">Newtown School · Kolkata &nbsp;·&nbsp; 83%</div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-row">
+            <span class="exp-title">B.Tech in CSE — AI &amp; ML</span>
+            <span class="exp-date">2021 — 2025</span>
+          </div>
+          <div class="exp-org">University of Engineering &amp; Management · Kolkata</div>
+          <ul class="exp-bullets">
+            <li>Specialised in Artificial Intelligence and Machine Learning.</li>
+            <li>Built deployment-ready projects using React, Python, and AI toolchains.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-row">
+            <span class="exp-title">NCC C Certificate — Naval Wing</span>
+            <span class="exp-date">2025</span>
+          </div>
+          <div class="exp-org">National Cadet Corps · Kolkata</div>
+          <ul class="exp-bullets">
+            <li>Attained Captain rank in the Naval Wing of the NCC.</li>
+            <li>Developed leadership, discipline, and team coordination under structured military training.</li>
+          </ul>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-row">
+            <span class="exp-title">Freelancing</span>
+            <span class="exp-date">2026 — Present</span>
+          </div>
+          <div class="exp-org">Independent · Remote</div>
+          <ul class="exp-bullets">
+            <li>Building AI-assisted web products and full-stack applications for clients.</li>
+            <li>Managing end-to-end delivery from design to deployment independently.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="cv-right" contenteditable="true" spellcheck="false">
+
+      <!-- Skills -->
+      <div class="sec">
+        <div class="sec-label">Skills</div>
+        <div class="sec-rule"></div>
+        <div class="skills-grid">
+          <div class="skill-item">Prompt Engineering</div>
+          <div class="skill-item">React</div>
+          <div class="skill-item">AI Product Dev</div>
+          <div class="skill-item">JavaScript</div>
+          <div class="skill-item">Deployment &amp; Hosting</div>
+          <div class="skill-item">Python</div>
+          <div class="skill-item">Debugging &amp; Testing</div>
+          <div class="skill-item">Figma</div>
+          <div class="skill-item">GitHub</div>
+          <div class="skill-item">Docker</div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="sec">
+        <div class="sec-label">Languages</div>
+        <div class="sec-rule"></div>
+
+        <div class="lang-item">
+          <div class="lang-row">
+            <span class="lang-name">Hindi</span>
+            <span class="lang-level">Native</span>
+          </div>
+        </div>
+
+        <div class="lang-item">
+          <div class="lang-row">
+            <span class="lang-name">English</span>
+            <span class="lang-level">Proficient</span>
+          </div>
+        </div>
+
+        <div class="lang-item">
+          <div class="lang-row">
+            <span class="lang-name">Bengali</span>
+            <span class="lang-level">Conversational</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interests -->
+      <div class="sec">
+        <div class="sec-label">Interests</div>
+        <div class="sec-rule"></div>
+        <div class="extras-chips">
+          <span class="echip">🏀 Basketball</span>
+          <span class="echip">🎹 Keyboard</span>
+          <span class="echip">🌌 Astronomy</span>
+          <span class="echip">🧠 Olympiads</span>
+          <span class="echip">💡 AI Building</span>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="sec">
+        <div class="sec-label">Contact</div>
+        <div class="sec-rule"></div>
+        <div class="contact-block">
+          <div class="contact-row">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <span class="contact-val">kunikapagaria@gmail.com</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            </span>
+            <span class="contact-val">github.com/kunikapagaria</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </span>
+            <span class="contact-val">linkedin.com/in/kunikapagaria</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <span class="contact-val">Kolkata, India</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /cv-body -->
+</div><!-- /cv -->
+
+<div class="edit-hint">✎ Click anywhere to edit</div>
+
+<button class="save-btn" onclick="saveFile()" title="Download updated HTML file">
+  ↓ Save File
+</button>
+
+<style>
+  .save-btn {
+    position: fixed; bottom: 14px; left: 18px;
+    font-family: var(--sans); font-size: .7rem; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase;
+    background: var(--navy); color: #fff;
+    border: none; padding: 7px 16px; border-radius: 20px;
+    cursor: pointer; opacity: .7;
+    transition: opacity .2s, transform .2s;
+    z-index: 999;
+  }
+  .save-btn:hover { opacity: 1; transform: translateY(-1px); }
+</style>
+
+<script>
+  const KEYS = ['cv-header', 'cv-left', 'cv-right'];
+
+  const regions = {
+    'cv-header': document.querySelector('.cv-header-text'),
+    'cv-left':   document.querySelector('.cv-left'),
+    'cv-right':  document.querySelector('.cv-right'),
+  };
+
+  // Restore saved edits from localStorage on load
+  KEYS.forEach(k => {
+    const saved = localStorage.getItem(k);
+    if (saved && regions[k]) regions[k].innerHTML = saved;
+  });
+
+  // Auto-save every edit to localStorage
+  KEYS.forEach(k => {
+    if (!regions[k]) return;
+    regions[k].addEventListener('input', () => {
+      localStorage.setItem(k, regions[k].innerHTML);
+    });
+  });
+
+  // Download the current page HTML as a file (permanently saves edits)
+  function saveFile() {
+    const clone = document.documentElement.cloneNode(true);
+
+    // Bake current innerHTML into the clone so saved edits are permanent
+    KEYS.forEach(k => {
+      if (!regions[k]) return;
+      const sel = k === 'cv-header' ? '.cv-header-text'
+                : k === 'cv-left'   ? '.cv-left'
+                : '.cv-right';
+      const target = clone.querySelector(sel);
+      if (target) target.innerHTML = regions[k].innerHTML;
+    });
+
+    const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'portfolio.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+</script>
+
+</body>
+</html>

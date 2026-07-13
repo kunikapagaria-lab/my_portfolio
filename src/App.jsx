@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import Book3D from './components/Book3D';
 import Environment3D from './components/Environment3D';
 import Book from './components/Book';
@@ -8,13 +7,23 @@ import ParallaxStars from './components/ParallaxStars';
 import { BookOpen, Box, Layers } from 'lucide-react';
 import CelestialHeader from './components/CelestialHeader';
 import { JourneyProvider } from './components/JourneyContext';
+import JourneyOverlay from './components/JourneyOverlay';
+import CameraDebugPanel from './components/CameraDebugPanel';
+import BookCameraDebugPanel, { BookCameraController, DEFAULT_BOOK_CAM, DEFAULT_BOOK_CAM_JOURNEY } from './components/BookCameraDebugPanel';
 
 
 function App() {
-  const [is3D, setIs3D] = useState(false); // Default to 2D view as requested
+  const [is3D, setIs3D] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
 
   const isOpen = currentPage > 0 && currentPage < 5;
+
+  // Switch to page-appropriate camera defaults when navigating
+  const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
+  useEffect(() => {
+    setBookCamParams(currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM);
+  }, [currentPage]);
 
   // Synchronize book open state with page index changes
   const handleNextPage = () => {
@@ -77,6 +86,12 @@ function App() {
 
   return (
     <JourneyProvider>
+      <JourneyOverlay />
+      <CameraDebugPanel />
+      {is3D && (
+        <BookCameraDebugPanel params={bookCamParams} setParams={setBookCamParams} defaultParams={currentDefault} />
+      )}
+
       {/* 1. Canvas Starfield with Parallax and Particle Trails (shared background) */}
       <ParallaxStars />
 
@@ -136,22 +151,19 @@ function App() {
             pointerEvents: 'auto' 
           }}
         >
-          <Canvas 
+          <Canvas
             shadows
             camera={{ position: [0, 0, 20], fov: 42 }}
           >
             <Environment3D />
-            <Book3D 
-              isOpen={isOpen} 
-              currentPage={currentPage} 
-              setCurrentPage={setCurrentPage} 
+            <Book3D
+              isOpen={isOpen}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              extRotX={bookCamParams.bookRotX}
+              extRotY={bookCamParams.bookRotY}
             />
-            <OrbitControls 
-              enablePan={false} 
-              enableRotate={false}
-              minDistance={15} 
-              maxDistance={40}
-            />
+            <BookCameraController params={bookCamParams} />
           </Canvas>
         </div>
       ) : (
