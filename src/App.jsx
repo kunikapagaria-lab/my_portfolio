@@ -4,7 +4,7 @@ import Book3D from './components/Book3D';
 import Environment3D from './components/Environment3D';
 import Book from './components/Book';
 import ParallaxStars from './components/ParallaxStars';
-import { BookOpen, Box, Layers } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import CelestialHeader from './components/CelestialHeader';
 import { JourneyProvider } from './components/JourneyContext';
 import JourneyOverlay from './components/JourneyOverlay';
@@ -100,35 +100,6 @@ function App() {
         <div className="cloud cloud-1"></div>
         <div className="cloud cloud-2"></div>
         <div className="cloud cloud-3"></div>
-      </div>
-
-      {/* 3. Floating View Mode Toggle Button */}
-      <div 
-        style={{ 
-          position: 'fixed', 
-          top: '25px', 
-          right: '25px', 
-          zIndex: 100, 
-          pointerEvents: 'auto' 
-        }}
-      >
-        <button 
-          onClick={() => setIs3D(!is3D)} 
-          className="toggle-view-btn"
-          aria-label={is3D ? "Switch to 2D Mode" : "Switch to 3D Mode"}
-        >
-          {is3D ? (
-            <>
-              <Layers size={16} />
-              <span>2D View</span>
-            </>
-          ) : (
-            <>
-              <Box size={16} />
-              <span>3D View</span>
-            </>
-          )}
-        </button>
       </div>
 
       {/* 3.5. Interactive Navigation Header Overlay (only visible when book is open) */}
