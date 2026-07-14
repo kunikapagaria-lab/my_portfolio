@@ -6,7 +6,7 @@ const CelestialHeader = ({ currentPage, goToPage }) => {
     { id: 1, label: 'Persona',        page: 1 },
     { id: 2, label: 'Journey',        page: 2 },
     { id: 3, label: 'Creations',      page: 3 },
-    { id: 4, label: 'Correspondence', page: 4 },
+    { id: 4, label: 'Contact Me',     page: 4 },
   ];
 
   const activeNodeId = currentPage >= 5 ? 0 : currentPage;

@@ -154,7 +154,7 @@ export const SkillsPage = ({ onNext }) => {
   return (
     <div className="paper-page skills-redesign">
       <div className="running-header">
-        <span className="running-header-text">ABOUT ME</span>
+        <span className="running-header-text">Skills</span>
         <div className="running-header-line" />
       </div>
 
@@ -372,6 +372,11 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
 
   return (
     <div className="paper-page work-alt-layout">
+      <div className="running-header">
+        <span className="running-header-text">Work</span>
+        <div className="running-header-line" />
+      </div>
+
       <div className="work-alt-header">
         <Briefcase size={13} style={{ color: 'var(--color-gold)', flexShrink: 0 }} />
         <span>Selected Work</span>
@@ -448,6 +453,11 @@ export const FunFactsPage = ({ onPrev, onNext }) => {
 
   return (
     <div className="paper-page funfacts-page">
+      <div className="running-header">
+        <span className="running-header-text">Fun Facts</span>
+        <div className="running-header-line" />
+      </div>
+
       <div className="funfacts-header">
         <Sparkles size={14} style={{ color: 'var(--color-gold)' }} />
         <span>Fun Facts</span>
@@ -515,6 +525,11 @@ export const ContactPage = ({ onPrev, onNext }) => {
 
   return (
     <div className="paper-page contact-page">
+      <div className="running-header">
+        <span className="running-header-text">Contact Me</span>
+        <div className="running-header-line" />
+      </div>
+
       <div className="contact-page-header">
         <Mail size={15} /> Write to Me
       </div>
