@@ -22,14 +22,15 @@ export const JourneyLeft = ({ onPrev, is3D = false }) => {
   );
 
   return (
-    <div className="paper-page" style={{
-      position: 'relative',
-      padding: 0,
-      overflow: 'hidden',
-      backgroundImage: `url(${journeyBgLeft})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    }}>
+    <div className="paper-page" style={{ position: 'relative', padding: '18px', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute',
+        inset: '18px',
+        borderRadius: '10px',
+        backgroundImage: `url(${journeyBgLeft})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }} />
       {onPrev && <div className="page-number" onClick={onPrev}>3</div>}
     </div>
   );
@@ -47,14 +48,15 @@ export const JourneyRight = ({ onNext, is3D = false }) => {
   );
 
   return (
-    <div className="paper-page" style={{
-      position: 'relative',
-      padding: 0,
-      overflow: 'hidden',
-      backgroundImage: `url(${journeyBgRight})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    }}>
+    <div className="paper-page" style={{ position: 'relative', padding: '18px', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute',
+        inset: '18px',
+        borderRadius: '10px',
+        backgroundImage: `url(${journeyBgRight})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }} />
       {onNext && <div className="page-number" onClick={onNext}>4</div>}
     </div>
   );

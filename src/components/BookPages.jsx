@@ -313,15 +313,18 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
   const [sanityProjects, setSanityProjects] = useState(null);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const itemRefs = useRef([]);
+  const linkRefs = useRef({});
   useEffect(() => {
     client.fetch(projectsQuery).then(setSanityProjects).catch(() => {});
   }, []);
 
-  // The book's compound 3D page-flip transform (parent rotateY + child rotateY
-  // around mismatched origins) distorts native hit-testing for content far from
-  // the flip's pivot edge, so hover/mouseenter can silently never fire there even
-  // though the element is visually correct. Compute "hovered" from raw cursor
-  // coordinates instead of relying on the browser's native hover/mouseenter.
+  // The book's 3D page-flip/tilt transforms distort native pointer hit-testing
+  // for content away from the rotation's pivot, so hover/click can silently
+  // never reach the real target even though the element paints in the right
+  // place — and which specific spot is affected shifts depending on exactly
+  // which page/position is showing, so it can't be fixed by tuning the
+  // transform alone. Compute hover and link clicks from raw cursor coordinates
+  // against getBoundingClientRect() instead of relying on native dispatch.
   useEffect(() => {
     const handleMove = (e) => {
       let found = null;
@@ -334,8 +337,24 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
       });
       setHoveredIdx(found);
     };
+    const handleClick = (e) => {
+      for (const el of Object.values(linkRefs.current)) {
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.open(el.href, '_blank', 'noopener,noreferrer');
+          return;
+        }
+      }
+    };
     window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
+    window.addEventListener('click', handleClick, true);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('click', handleClick, true);
+    };
   }, []);
 
   const allProjects = sanityProjects
@@ -378,8 +397,24 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
                     ))}
                   </div>
                   <div className="work-alt-links">
-                    {p.github !== '#' && <a href={p.github} target="_blank" rel="noopener noreferrer" title="GitHub"><Github size={13} /></a>}
-                    {p.demo !== '#' && <a href={p.demo} target="_blank" rel="noopener noreferrer" title="Live"><ExternalLink size={13} /></a>}
+                    {p.github !== '#' && (
+                      <a
+                        href={p.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="GitHub"
+                        ref={el => { linkRefs.current[`${i}-github`] = el; }}
+                      ><Github size={13} /></a>
+                    )}
+                    {p.demo !== '#' && (
+                      <a
+                        href={p.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Live"
+                        ref={el => { linkRefs.current[`${i}-demo`] = el; }}
+                      ><ExternalLink size={13} /></a>
+                    )}
                   </div>
                 </div>
               </div>
