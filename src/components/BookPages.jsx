@@ -311,8 +311,31 @@ const FALLBACK_PROJECTS = [
 
 export const WorkPage = ({ part = 1, onPrev, onNext }) => {
   const [sanityProjects, setSanityProjects] = useState(null);
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+  const itemRefs = useRef([]);
   useEffect(() => {
     client.fetch(projectsQuery).then(setSanityProjects).catch(() => {});
+  }, []);
+
+  // The book's compound 3D page-flip transform (parent rotateY + child rotateY
+  // around mismatched origins) distorts native hit-testing for content far from
+  // the flip's pivot edge, so hover/mouseenter can silently never fire there even
+  // though the element is visually correct. Compute "hovered" from raw cursor
+  // coordinates instead of relying on the browser's native hover/mouseenter.
+  useEffect(() => {
+    const handleMove = (e) => {
+      let found = null;
+      itemRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+          found = i;
+        }
+      });
+      setHoveredIdx(found);
+    };
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
   const allProjects = sanityProjects
@@ -339,7 +362,11 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
         {projects.map((p, i) => {
           const imgRight = i % 2 === 0;
           return (
-            <div key={i} className={`work-editorial-item ${imgRight ? '' : 'work-editorial-flip'}`}>
+            <div
+              key={i}
+              ref={el => { itemRefs.current[i] = el; }}
+              className={`work-editorial-item ${imgRight ? '' : 'work-editorial-flip'} ${hoveredIdx === i ? 'is-hovered' : ''}`}
+            >
 
               <div className="work-editorial-text">
                 <p className="work-editorial-title">{p.title}</p>

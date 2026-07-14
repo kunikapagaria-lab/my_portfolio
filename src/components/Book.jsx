@@ -43,6 +43,18 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
   const sheetZIndex = (sheetNum) =>
     currentPage >= sheetNum ? 10 + sheetNum : 10 - sheetNum;
 
+  // Only the two page-sides that make up the currently visible spread should ever
+  // receive pointer events. With preserve-3d + rotateY page flips, overlapping
+  // inactive sheets can otherwise intercept hover/clicks meant for the active page
+  // (z-index alone doesn't fully control hit-testing across 3D-transformed layers).
+  const isFrontActive = (sheetNum) => currentPage === sheetNum - 1;
+  const isBackActive = (sheetNum) => currentPage === sheetNum;
+  // Sheets use translateZ for depth ordering; an inactive sheet closer to the
+  // camera (larger translateZ) can still intercept the compositor's hit-testing
+  // for content behind it even when its own page-sides are pointer-events:none,
+  // so the outer sheet itself must also be excluded when neither face is active.
+  const isSheetActive = (sheetNum) => isFrontActive(sheetNum) || isBackActive(sheetNum);
+
   // Mouse-parallax tilt on the closed cover, standing in for the unfinished 3D view
   const handleMouseMove = (e) => {
     if (isOpen || !bookRef.current) return;
@@ -70,9 +82,9 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       >
 
       {/* ================= SHEET 1: FRONT COVER / INSIDE LEFT ================= */}
-      <div className={`book-page ${currentPage >= 1 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(1) }}>
+      <div className={`book-page ${currentPage >= 1 ? 'flipped' : ''} ${isSheetActive(1) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(1) }}>
         {/* Front Cover — illustration full-bleed */}
-        <div className="page-side page-front cover-front" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className={`page-side page-front cover-front ${isFrontActive(1) ? '' : 'sheet-inactive'}`} style={{ padding: 0, overflow: 'hidden' }}>
           {/* Full-bleed illustration */}
           <img
             src={coverArt}
@@ -117,8 +129,8 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
         </div>
 
         {/* Sheet 1 Back: About Me (was Introductory) */}
-        <div className="page-side page-back" style={{ zIndex: 1 }}>
-          <AboutPage 
+        <div className={`page-side page-back ${isBackActive(1) ? '' : 'sheet-inactive'}`} style={{ zIndex: 1 }}>
+          <AboutPage
             currentPage={currentPage}
             goToPage={goToPage}
             onNext={(e) => handlePageTurn('next', e)}
@@ -127,36 +139,36 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 2: SKILLS / JOURNEY LEFT ================= */}
-      <div className={`book-page ${currentPage >= 2 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(2) }}>
+      <div className={`book-page ${currentPage >= 2 ? 'flipped' : ''} ${isSheetActive(2) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(2) }}>
         {/* Front Side: Skills */}
-        <div className="page-side page-front">
-          <SkillsPage 
+        <div className={`page-side page-front ${isFrontActive(2) ? '' : 'sheet-inactive'}`}>
+          <SkillsPage
             currentPage={currentPage}
             goToPage={goToPage}
-            onNext={(e) => handlePageTurn('next', e)} 
+            onNext={(e) => handlePageTurn('next', e)}
           />
         </div>
 
         {/* Back Side: Journey Left */}
-        <div className="page-side page-back">
-          <JourneyLeft 
+        <div className={`page-side page-back ${isBackActive(2) ? '' : 'sheet-inactive'}`}>
+          <JourneyLeft
             onPrev={(e) => handlePageTurn('prev', e)} 
           />
         </div>
       </div>
 
       {/* ================= SHEET 3: JOURNEY RIGHT / WORK ================= */}
-      <div className={`book-page ${currentPage >= 3 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(3) }}>
+      <div className={`book-page ${currentPage >= 3 ? 'flipped' : ''} ${isSheetActive(3) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(3) }}>
         {/* Front Side: Journey Right */}
-        <div className="page-side page-front">
-          <JourneyRight 
-            onNext={(e) => handlePageTurn('next', e)} 
+        <div className={`page-side page-front ${isFrontActive(3) ? '' : 'sheet-inactive'}`}>
+          <JourneyRight
+            onNext={(e) => handlePageTurn('next', e)}
           />
         </div>
 
         {/* Back Side: Work Part 1 */}
-        <div className="page-side page-back">
-          <WorkPage 
+        <div className={`page-side page-back ${isBackActive(3) ? '' : 'sheet-inactive'}`}>
+          <WorkPage
             part={1}
             currentPage={currentPage}
             goToPage={goToPage}
@@ -166,20 +178,20 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 4: WORK PART 2 / FUN FACTS ================= */}
-      <div className={`book-page ${currentPage >= 4 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(4) }}>
+      <div className={`book-page ${currentPage >= 4 ? 'flipped' : ''} ${isSheetActive(4) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(4) }}>
         {/* Front Side: Work Part 2 */}
-        <div className="page-side page-front">
-          <WorkPage 
+        <div className={`page-side page-front ${isFrontActive(4) ? '' : 'sheet-inactive'}`}>
+          <WorkPage
             part={2}
             currentPage={currentPage}
             goToPage={goToPage}
-            onNext={(e) => handlePageTurn('next', e)} 
+            onNext={(e) => handlePageTurn('next', e)}
           />
         </div>
 
         {/* Back Side: Fun Facts */}
-        <div className="page-side page-back">
-          <FunFactsPage 
+        <div className={`page-side page-back ${isBackActive(4) ? '' : 'sheet-inactive'}`}>
+          <FunFactsPage
             currentPage={currentPage}
             goToPage={goToPage}
             onPrev={(e) => handlePageTurn('prev', e)} 
@@ -188,18 +200,18 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 5: CONTACT / BACK COVER ================= */}
-      <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(5) }}>
+      <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''} ${isSheetActive(5) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(5) }}>
         {/* Front Side: Contact */}
-        <div className="page-side page-front">
-          <ContactPage 
+        <div className={`page-side page-front ${isFrontActive(5) ? '' : 'sheet-inactive'}`}>
+          <ContactPage
             currentPage={currentPage}
             goToPage={goToPage}
-            onNext={(e) => handlePageTurn('next', e)} 
+            onNext={(e) => handlePageTurn('next', e)}
           />
         </div>
 
         {/* Back Cover */}
-        <div className="page-side page-back cover-back" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
+        <div className={`page-side page-back cover-back ${isBackActive(5) ? '' : 'sheet-inactive'}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
           <div style={{ width: '80%', opacity: 0.6 }}>
             <svg className="cover-line-art" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path 
