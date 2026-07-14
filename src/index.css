@@ -174,17 +174,21 @@ body {
   transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 1.2s ease, width 1.2s cubic-bezier(0.19, 1, 0.22, 1), height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
   transform-style: preserve-3d;
   cursor: pointer;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
 }
 
 /* Subtle idle floating shadow for the closed book */
 .book.closed {
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2), 
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2),
               5px 10px 20px rgba(0, 0, 0, 0.15);
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
 }
 
 .book.closed:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 30px 60px rgba(18, 30, 66, 0.3), 
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-5px);
+  box-shadow: 0 30px 60px rgba(18, 30, 66, 0.3),
               10px 15px 25px rgba(0, 0, 0, 0.2);
 }
 
@@ -1860,6 +1864,10 @@ body {
   gap: 0;
 }
 
+.work-editorial-list.is-single {
+  justify-content: center;
+}
+
 .work-editorial-item {
   display: flex;
   align-items: center;
@@ -1867,6 +1875,35 @@ body {
   padding: 18px 0;
   border-bottom: 1px solid rgba(197,168,128,0.2);
   flex: 1;
+  transition: transform 0.3s ease;
+}
+
+.work-editorial-item:hover {
+  transform: translateY(-3px);
+}
+
+.work-editorial-item:hover .work-editorial-title {
+  color: var(--color-gold);
+}
+
+.work-editorial-item:hover .work-editorial-img {
+  border-color: rgba(197,168,128,0.6);
+  box-shadow: 0 10px 24px rgba(28,45,94,0.18);
+}
+
+.work-editorial-item:hover .work-editorial-img img {
+  transform: scale(1.05);
+}
+
+.work-editorial-list.is-single .work-editorial-item {
+  flex: 0 1 auto;
+  border-bottom: none;
+  max-width: 92%;
+  margin: 0 auto;
+}
+
+.work-editorial-list.is-single .work-editorial-img {
+  width: 58%;
 }
 
 .work-editorial-item:last-child {
@@ -1893,6 +1930,7 @@ body {
   color: var(--color-navy);
   margin: 0;
   line-height: 1.25;
+  transition: color 0.3s ease;
 }
 
 .work-editorial-desc {
@@ -1919,12 +1957,14 @@ body {
   overflow: hidden;
   background: rgba(197,168,128,0.07);
   border: 1px solid rgba(197,168,128,0.3);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .work-editorial-img img {
   width: 100%;
   height: auto;
   display: block;
+  transition: transform 0.35s ease;
 }
 
 .work-editorial-img-placeholder {
@@ -2259,6 +2299,7 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   height: 100%;
   overflow: hidden;
 }
@@ -2286,7 +2327,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 1;
+  flex: none;
   min-height: 0;
 }
 
@@ -2315,13 +2356,11 @@ body {
 }
 
 .contact-field-message {
-  flex: 1;
-  min-height: 0;
+  flex: none;
 }
 
 .contact-field-message textarea {
-  flex: 1;
-  min-height: 0;
+  height: 110px;
   resize: none;
 }
 

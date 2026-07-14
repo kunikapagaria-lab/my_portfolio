@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { AboutPage, SkillsPage, WorkPage, FunFactsPage, ContactPage } from './BookPages';
 import { JourneyLeft, JourneyRight } from './JourneyMap';
 import kunikaPhoto from '../assets/kunika.jpg';
 import coverArt from '../assets/cover_art.png';
+
+const MAX_TILT_DEG = 8;
 
 const Book = ({ isOpen, currentPage, setCurrentPage }) => {
   // Max pages represents the number of page turns (0 to 5)
@@ -12,6 +14,8 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
   // 3: Open to Spread 3 (Work on left, Fun Facts on right)
   // 4: Open to Spread 4 (Contact on left, Inside back cover on right)
   // 5: Closed Back (Back Cover)
+
+  const bookRef = useRef(null);
 
   const handlePageTurn = (dir, e) => {
     e.stopPropagation();
@@ -32,15 +36,41 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
     }
   };
 
+  // Once a sheet is flipped, it should stack above earlier flipped sheets (closer to
+  // the viewer); while unflipped, the soonest-to-turn sheet should stack on top of the
+  // ones still further ahead. Otherwise an early page (e.g. About) stays visually and
+  // interactively on top of later pages (e.g. Work, Contact) once you've paged past it.
+  const sheetZIndex = (sheetNum) =>
+    currentPage >= sheetNum ? 10 + sheetNum : 10 - sheetNum;
+
+  // Mouse-parallax tilt on the closed cover, standing in for the unfinished 3D view
+  const handleMouseMove = (e) => {
+    if (isOpen || !bookRef.current) return;
+    const rect = bookRef.current.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width - 0.5;
+    const relY = (e.clientY - rect.top) / rect.height - 0.5;
+    bookRef.current.style.setProperty('--tilt-y', `${relX * MAX_TILT_DEG * 2}deg`);
+    bookRef.current.style.setProperty('--tilt-x', `${-relY * MAX_TILT_DEG * 2}deg`);
+  };
+
+  const handleMouseLeave = () => {
+    if (!bookRef.current) return;
+    bookRef.current.style.setProperty('--tilt-x', '0deg');
+    bookRef.current.style.setProperty('--tilt-y', '0deg');
+  };
+
   return (
     <div className={`book-float-wrapper ${isOpen ? 'open' : 'closed'}`}>
-      <div 
-        className={`book ${isOpen ? 'open' : 'closed'} page-${currentPage}`} 
+      <div
+        ref={bookRef}
+        className={`book ${isOpen ? 'open' : 'closed'} page-${currentPage}`}
         onClick={handleBookClick}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
 
       {/* ================= SHEET 1: FRONT COVER / INSIDE LEFT ================= */}
-      <div className={`book-page ${currentPage >= 1 ? 'flipped' : ''}`} style={{ zIndex: 5 }}>
+      <div className={`book-page ${currentPage >= 1 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(1) }}>
         {/* Front Cover — illustration full-bleed */}
         <div className="page-side page-front cover-front" style={{ padding: 0, overflow: 'hidden' }}>
           {/* Full-bleed illustration */}
@@ -97,7 +127,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 2: SKILLS / JOURNEY LEFT ================= */}
-      <div className={`book-page ${currentPage >= 2 ? 'flipped' : ''}`} style={{ zIndex: 5 }}>
+      <div className={`book-page ${currentPage >= 2 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(2) }}>
         {/* Front Side: Skills */}
         <div className="page-side page-front">
           <SkillsPage 
@@ -116,7 +146,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 3: JOURNEY RIGHT / WORK ================= */}
-      <div className={`book-page ${currentPage >= 3 ? 'flipped' : ''}`} style={{ zIndex: 4 }}>
+      <div className={`book-page ${currentPage >= 3 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(3) }}>
         {/* Front Side: Journey Right */}
         <div className="page-side page-front">
           <JourneyRight 
@@ -136,7 +166,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 4: WORK PART 2 / FUN FACTS ================= */}
-      <div className={`book-page ${currentPage >= 4 ? 'flipped' : ''}`} style={{ zIndex: 3 }}>
+      <div className={`book-page ${currentPage >= 4 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(4) }}>
         {/* Front Side: Work Part 2 */}
         <div className="page-side page-front">
           <WorkPage 
@@ -158,7 +188,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
       </div>
 
       {/* ================= SHEET 5: CONTACT / BACK COVER ================= */}
-      <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''}`} style={{ zIndex: 2 }}>
+      <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''}`} style={{ zIndex: sheetZIndex(5) }}>
         {/* Front Side: Contact */}
         <div className="page-side page-front">
           <ContactPage 

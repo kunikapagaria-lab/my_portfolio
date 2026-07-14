@@ -335,7 +335,7 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
         <span>Selected Work</span>
       </div>
 
-      <div className="work-editorial-list">
+      <div className={`work-editorial-list ${projects.length === 1 ? 'is-single' : ''}`}>
         {projects.map((p, i) => {
           const imgRight = i % 2 === 0;
           return (
