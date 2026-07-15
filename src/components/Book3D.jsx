@@ -427,7 +427,7 @@ const Book3D = ({ isOpen, currentPage, setCurrentPage, extRotX = 0, extRotY = 0 
             {/* Bottom gradient + title overlay */}
             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(35,15,25,0.82))', padding: '50px 32px 32px', textAlign: 'center' }}>
               <h1 style={{ color: '#fce8e8', fontFamily: 'Georgia,serif', fontSize: '26px', letterSpacing: '0.18em', fontWeight: 700, margin: 0 }}>KUNIKA PAGARIA</h1>
-              <div style={{ color: '#e8b4c0', fontFamily: 'Georgia,serif', fontSize: '12px', letterSpacing: '0.14em', marginTop: '8px' }}>AI Assisted Developer</div>
+              <div style={{ color: '#e8b4c0', fontFamily: 'Georgia,serif', fontSize: '12px', letterSpacing: '0.14em', marginTop: '8px' }}>Product Designer | AI-Assisted Developer</div>
             </div>
           </div>
         }

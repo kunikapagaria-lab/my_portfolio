@@ -42,7 +42,7 @@ export const AboutPage = ({ onNext }) => {
   }, []);
 
   const name = about?.name ?? 'KUNIKA PAGARIA';
-  const designation = about?.designation ?? 'AI Assisted Developer';
+  const designation = about?.designation ?? 'Product Designer | AI-Assisted Developer';
   const bio = about?.bio ?? 'Engineering graduate with a strong interest in product development, project management, and technology-driven problem solving. Skilled at turning ideas into practical, user-focused products through fast execution and modern development tools. Comfortable working across both technical and creative workflows, with a focus on building functional, deployment-ready applications. Known for adaptability, quick learning, problem-solving, and working effectively in fast-paced environments.';
   const photo = about?.profileImage ? urlFor(about.profileImage).width(200).url() : kunikaPhoto;
 

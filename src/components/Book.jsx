@@ -124,7 +124,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
           }}>
             <div style={{ fontSize: '0.62rem', letterSpacing: '0.28em', color: 'rgba(232,180,192,0.90)', fontFamily: 'var(--font-sans)', fontWeight: 500, textTransform: 'uppercase' }}>Portfolio</div>
             <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.55rem', fontWeight: 700, color: '#fce8e8', letterSpacing: '0.1em', margin: 0, textAlign: 'center' }}>KUNIKA PAGARIA</h1>
-            <div style={{ fontSize: '0.62rem', letterSpacing: '0.22em', color: 'rgba(232,180,192,0.85)', fontFamily: 'var(--font-sans)', fontWeight: 400 }}>AI Assisted Developer</div>
+            <div style={{ fontSize: '0.62rem', letterSpacing: '0.22em', color: 'rgba(232,180,192,0.85)', fontFamily: 'var(--font-sans)', fontWeight: 400 }}>Product Designer | AI-Assisted Developer</div>
           </div>
         </div>
 
