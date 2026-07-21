@@ -19,7 +19,7 @@ export const aboutQuery = `*[_type == "about"][0]{
 }`;
 
 export const projectsQuery = `*[_type == "project"] | order(order asc){
-  _id, title, slug, description, image,
+  _id, title, slug, description, problemStatement, image,
   techStack, liveUrl, githubUrl, featured
 }`;
 

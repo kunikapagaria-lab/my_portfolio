@@ -1874,9 +1874,9 @@ body {
 
 .work-editorial-item {
   display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 0;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(197,168,128,0.2);
   flex: 1;
   transition: transform 0.3s ease;
@@ -1939,15 +1939,40 @@ body {
 
 .work-editorial-desc {
   font-family: var(--font-sans);
-  font-size: 0.73rem;
+  font-size: 0.69rem;
   color: var(--color-muted, #6b7a9a);
-  line-height: 1.65;
+  line-height: 1.6;
   margin: 0;
   text-align: justify;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  overflow: hidden;
+}
+
+.work-problem-wrap {
+  margin: 6px 0 4px;
+  padding: 6px 10px;
+  border-left: 2px solid var(--color-gold);
+  background: rgba(197,168,128,0.06);
+  border-radius: 0 4px 4px 0;
+}
+
+.work-problem-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 3px;
+  opacity: 0.85;
+}
+
+.work-problem-text {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  color: var(--color-muted, #6b7a9a);
+  line-height: 1.55;
+  margin: 0;
+  font-style: italic;
 }
 
 .work-editorial-meta {
@@ -1959,7 +1984,7 @@ body {
 }
 
 .work-editorial-img {
-  width: 52%;
+  width: 42%;
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;

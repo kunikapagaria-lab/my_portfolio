@@ -268,6 +268,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Stellar Canvas',
     desc: 'Generative astronomical simulator drawing 10 k particle stars with gravity mechanics.',
+    problem: 'Astronomy visualisations require expensive desktop software — this brings them to any browser instantly.',
     tags: ['React', 'Canvas API', 'Physics'],
     github: '#',
     demo: '#',
@@ -275,6 +276,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Sonata Audio Engine',
     desc: 'Interactive visualizer mapping string frequencies to canvas drawings.',
+    problem: 'Musicians lack a real-time, visual feedback layer when composing — this turns sound into art on screen.',
     tags: ['Web Audio', 'CSS 3D', 'Vite'],
     github: '#',
     demo: '#',
@@ -282,6 +284,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Orbital Pathmaker',
     desc: 'Educational 3D interface teaching celestial math and Keplerian orbits.',
+    problem: 'Celestial mechanics are abstract and hard to grasp from textbooks alone — this makes them hands-on.',
     tags: ['React', 'Three.js', 'Math'],
     github: '#',
     demo: '#',
@@ -289,6 +292,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Nebula Shader Engine',
     desc: 'Procedural raymarching gas simulator mapping audio frequencies to gas density.',
+    problem: 'Shader art is locked behind native tools — this democratises GPU-driven visual generation in the browser.',
     tags: ['GLSL', 'WebGL', 'Shaders'],
     github: '#',
     demo: '#',
@@ -296,6 +300,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Aetheria Synth Node',
     desc: 'Modular node interface connecting frequency synthesizers with canvas drawings.',
+    problem: 'Modular synthesis workflows are fragmented across tools — this unifies patching and visuals in one canvas.',
     tags: ['Web Audio', 'React', 'Canvas'],
     github: '#',
     demo: '#',
@@ -303,6 +308,7 @@ const FALLBACK_PROJECTS = [
   {
     title: 'Gravity Well Sim',
     desc: 'Keplerian orbit solver calculating gravitational vectors for binary star systems.',
+    problem: 'Simulating multi-body gravity is computationally opaque — this makes the physics transparent and interactive.',
     tags: ['Physics', 'JavaScript', 'Vector Math'],
     github: '#',
     demo: '#',
@@ -361,6 +367,7 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
     ? sanityProjects.map(p => ({
         title: p.title,
         desc: p.description ?? '',
+        problem: p.problemStatement ?? '',
         tags: p.techStack ?? [],
         github: p.githubUrl ?? '#',
         demo: p.liveUrl ?? '#',
@@ -395,6 +402,12 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
               <div className="work-editorial-text">
                 <p className="work-editorial-title">{p.title}</p>
                 <p className="work-editorial-desc">{p.desc}</p>
+                {p.problem && (
+                  <div className="work-problem-wrap">
+                    <span className="work-problem-label">Problem it Solves</span>
+                    <p className="work-problem-text">{p.problem}</p>
+                  </div>
+                )}
                 <div className="work-editorial-meta">
                   <div className="work-alt-tags">
                     {p.tags.slice(0, 3).map((t, j) => (

@@ -23,6 +23,13 @@ export default {
       rows: 4,
     },
     {
+      name: 'problemStatement',
+      title: 'Problem it Solves',
+      type: 'text',
+      rows: 3,
+      description: 'What real-world problem does this project address?',
+    },
+    {
       name: 'image',
       title: 'Project Image',
       type: 'image',
