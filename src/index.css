@@ -2724,12 +2724,6 @@ body {
   pointer-events: none !important;
 }
 
-/* Hide entirely inactive book-page sheets so their content cannot bleed through
-   active pages. Only applies to the outer sheet wrapper (both faces inactive),
-   not to individual page-side elements which need to stay in the 3D scene. */
-.book-page.sheet-inactive {
-  visibility: hidden;
-}
 
 
 
