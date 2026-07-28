@@ -17,7 +17,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
 
-  const isOpen = currentPage > 0 && currentPage < 6;
+  const isOpen = currentPage > 0 && currentPage <= 6;
 
   // Switch to page-appropriate camera defaults when navigating
   const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
@@ -73,11 +73,11 @@ function App() {
     };
   }, [currentPage]);
 
-  // Reset to front cover immediately when reaching the back cover (page 6).
-  // The 0.9s page-flip CSS animation briefly shows the back cover as a closing effect.
+  // Auto-reset to front cover 2 seconds after the back cover appears.
   useEffect(() => {
     if (currentPage === 6) {
-      handleReset();
+      const timer = setTimeout(() => handleReset(), 2000);
+      return () => clearTimeout(timer);
     }
   }, [currentPage]);
 
@@ -101,7 +101,7 @@ function App() {
       </div>
 
       {/* 3.5. Interactive Navigation Header Overlay (only visible when book is open) */}
-      {isOpen && (
+      {isOpen && currentPage < 6 && (
         <CelestialHeader currentPage={currentPage} goToPage={goToPage} />
       )}
 

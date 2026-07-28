@@ -81,6 +81,15 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
         onMouseLeave={handleMouseLeave}
       >
 
+      {/* Dark navy fill covers the transparent right side when back cover is shown */}
+      {currentPage === 6 && (
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 17,
+          background: 'radial-gradient(circle at center, rgba(28,45,96,1) 0%, rgba(14,22,48,1) 100%)',
+          borderRadius: '6px 18px 18px 6px',
+        }} />
+      )}
+
       {/* ================= SHEET 1: FRONT COVER / INSIDE LEFT ================= */}
       <div className={`book-page ${currentPage >= 1 ? 'flipped' : ''} ${isSheetActive(1) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(1) }}>
         {/* Front Cover — illustration full-bleed */}
