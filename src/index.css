@@ -1336,26 +1336,6 @@ body {
   }
 }
 
-/* ═══════════════════════════════════════════════════
-   IDEA 1 — Spread divider: thin gold rule at spine
-═══════════════════════════════════════════════════ */
-.book.open::after {
-  content: '';
-  position: absolute;
-  top: 6%;
-  bottom: 6%;
-  left: 50%;
-  width: 1px;
-  background: linear-gradient(to bottom,
-    transparent 0%,
-    rgba(197, 168, 128, 0.35) 20%,
-    rgba(197, 168, 128, 0.55) 50%,
-    rgba(197, 168, 128, 0.35) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 20;
-}
 
 /* ═══════════════════════════════════════════════════
    IDEA 3 — About Me: Typographic-first layout
