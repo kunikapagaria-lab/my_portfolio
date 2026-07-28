@@ -19,7 +19,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
 
   const handlePageTurn = (dir, e) => {
     e.stopPropagation();
-    if (dir === 'next' && currentPage < 5) {
+    if (dir === 'next' && currentPage < 6) {
       setCurrentPage(currentPage + 1);
     } else if (dir === 'prev' && currentPage > 0) {
       setCurrentPage(currentPage - 1);
@@ -177,9 +177,9 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
         </div>
       </div>
 
-      {/* ================= SHEET 4: WORK PART 2 / FUN FACTS ================= */}
+      {/* ================= SHEET 4: WORK PART 2 / WORK PART 3 ================= */}
       <div className={`book-page ${currentPage >= 4 ? 'flipped' : ''} ${isSheetActive(4) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(4) }}>
-        {/* Front Side: Work Part 2 */}
+        {/* Front Side: Work Part 2 (right page, spread 3) */}
         <div className={`page-side page-front ${isFrontActive(4) ? '' : 'sheet-inactive'}`}>
           <WorkPage
             part={2}
@@ -189,20 +189,48 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
           />
         </div>
 
-        {/* Back Side: Fun Facts */}
+        {/* Back Side: Work Part 3 (left page, spread 4) */}
         <div className={`page-side page-back ${isBackActive(4) ? '' : 'sheet-inactive'}`}>
-          <FunFactsPage
+          <WorkPage
+            part={3}
             currentPage={currentPage}
             goToPage={goToPage}
-            onPrev={(e) => handlePageTurn('prev', e)} 
+            onPrev={(e) => handlePageTurn('prev', e)}
           />
         </div>
       </div>
 
-      {/* ================= SHEET 5: CONTACT / BACK COVER ================= */}
+      {/* ================= SHEET 5: FUN FACTS / INNER BACK ================= */}
       <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''} ${isSheetActive(5) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(5) }}>
-        {/* Front Side: Contact */}
+        {/* Front Side: Fun Facts (right page, spread 4) */}
         <div className={`page-side page-front ${isFrontActive(5) ? '' : 'sheet-inactive'}`}>
+          <FunFactsPage
+            currentPage={currentPage}
+            goToPage={goToPage}
+            onNext={(e) => handlePageTurn('next', e)}
+          />
+        </div>
+
+        {/* Back Side: Inner back decorative (left page, spread 5) */}
+        <div className={`page-side page-back ${isBackActive(5) ? '' : 'sheet-inactive'}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '16px' }}>
+          <svg viewBox="0 0 120 120" width="80" height="80" fill="none">
+            <circle cx="60" cy="60" r="40" stroke="rgba(197,168,128,0.18)" strokeWidth="1"/>
+            <path d="M60 20 L63 50 L93 53 L63 56 L60 86 L57 56 L27 53 L57 50 Z" fill="rgba(197,168,128,0.35)"/>
+            <circle cx="60" cy="60" r="3" fill="rgba(197,168,128,0.6)"/>
+            <circle cx="30" cy="30" r="1.5" fill="rgba(197,168,128,0.3)"/>
+            <circle cx="90" cy="28" r="1" fill="rgba(197,168,128,0.25)"/>
+            <circle cx="88" cy="88" r="1.5" fill="rgba(197,168,128,0.3)"/>
+          </svg>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.9rem', color: 'rgba(28,45,94,0.4)', letterSpacing: '0.08em', textAlign: 'center', fontStyle: 'italic' }}>
+            designed beneath<br/>the twilight sky
+          </div>
+        </div>
+      </div>
+
+      {/* ================= SHEET 6: CONTACT / BACK COVER ================= */}
+      <div className={`book-page ${currentPage >= 6 ? 'flipped' : ''} ${isSheetActive(6) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(6) }}>
+        {/* Front Side: Contact (right page, spread 5) */}
+        <div className={`page-side page-front ${isFrontActive(6) ? '' : 'sheet-inactive'}`}>
           <ContactPage
             currentPage={currentPage}
             goToPage={goToPage}
@@ -211,14 +239,14 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
         </div>
 
         {/* Back Cover */}
-        <div className={`page-side page-back cover-back ${isBackActive(5) ? '' : 'sheet-inactive'}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
+        <div className={`page-side page-back cover-back ${isBackActive(6) ? '' : 'sheet-inactive'}`} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
           <div style={{ width: '80%', opacity: 0.6 }}>
             <svg className="cover-line-art" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path 
-                d="M 10,75 C 30,75 35,50 45,50 C 50,50 55,60 55,68 C 55,80 35,85 35,95 C 35,105 55,108 60,95 C 63,88 65,55 70,55 C 75,55 80,75 90,75 L 110,75 C 125,75 130,55 138,55 C 142,55 145,62 145,68 C 145,78 128,82 128,92 C 128,100 145,103 150,92 C 152,85 155,58 158,58 C 162,58 165,75 180,75 L 200,75 C 205,75 208,65 210,65 C 212,65 213,70 213,78 C 213,85 205,88 205,95 C 205,102 215,104 218,95 C 220,88 221,68 223,68 C 225,68 228,75 235,75 L 250,75 C 260,75 262,68 265,68 C 270,68 273,50 278,45 C 283,40 292,40 295,45 C 298,50 295,65 292,72 C 288,80 282,88 282,92 C 282,96 295,96 320,96 C 335,96 335,80 335,75 C 335,70 338,70 340,75 C 342,80 345,96 360,96 L 390,75" 
-                stroke="white" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
+              <path
+                d="M 10,75 C 30,75 35,50 45,50 C 50,50 55,60 55,68 C 55,80 35,85 35,95 C 35,105 55,108 60,95 C 63,88 65,55 70,55 C 75,55 80,75 90,75 L 110,75 C 125,75 130,55 138,55 C 142,55 145,62 145,68 C 145,78 128,82 128,92 C 128,100 145,103 150,92 C 152,85 155,58 158,58 C 162,58 165,75 180,75 L 200,75 C 205,75 208,65 210,65 C 212,65 213,70 213,78 C 213,85 205,88 205,95 C 205,102 215,104 218,95 C 220,88 221,68 223,68 C 225,68 228,75 235,75 L 250,75 C 260,75 262,68 265,68 C 270,68 273,50 278,45 C 283,40 292,40 295,45 C 298,50 295,65 292,72 C 288,80 282,88 282,92 C 282,96 295,96 320,96 C 335,96 335,80 335,75 C 335,70 338,70 340,75 C 342,80 345,96 360,96 L 390,75"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <circle cx="205" cy="125" r="2.5" fill="white" style={{ opacity: 0.8 }}/>
@@ -231,7 +259,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
           <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', marginTop: '8px' }}>
             Designed underneath the twilight sky.
           </div>
-          {currentPage === 5 && (
+          {currentPage === 6 && (
             <div
               style={{ marginTop: '16px', fontSize: '0.72rem', color: 'rgba(197,168,128,0.7)', letterSpacing: '0.12em', cursor: 'pointer', fontFamily: 'var(--font-serif)' }}
               onClick={(e) => handlePageTurn('prev', e)}

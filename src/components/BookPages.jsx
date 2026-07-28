@@ -375,7 +375,7 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
       }))
     : FALLBACK_PROJECTS;
 
-  const projects = part === 1 ? allProjects.slice(0, 2) : allProjects.slice(2, 4);
+  const projects = part === 1 ? allProjects.slice(0, 2) : part === 2 ? allProjects.slice(2, 4) : allProjects.slice(4, 6);
 
   return (
     <div className="paper-page work-alt-layout">
@@ -446,7 +446,7 @@ export const WorkPage = ({ part = 1, onPrev, onNext }) => {
         })}
       </div>
 
-      {onPrev && <div className="page-number" onClick={onPrev}>5</div>}
+      {onPrev && <div className="page-number" onClick={onPrev}>{part === 3 ? 7 : 5}</div>}
       {onNext && <div className="page-number" onClick={onNext}>6</div>}
     </div>
   );
@@ -489,8 +489,7 @@ export const FunFactsPage = ({ onPrev, onNext }) => {
           </div>
         ))}
       </div>
-      {onPrev && <div className="page-number" onClick={onPrev}>7</div>}
-      {onNext && <div className="page-number" onClick={onNext}>7</div>}
+      {onNext && <div className="page-number" onClick={onNext}>8</div>}
     </div>
   );
 };

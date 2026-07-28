@@ -17,7 +17,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
 
-  const isOpen = currentPage > 0 && currentPage < 5;
+  const isOpen = currentPage > 0 && currentPage < 6;
 
   // Switch to page-appropriate camera defaults when navigating
   const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
@@ -27,7 +27,7 @@ function App() {
 
   // Synchronize book open state with page index changes
   const handleNextPage = () => {
-    if (currentPage < 5) {
+    if (currentPage < 6) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -75,7 +75,7 @@ function App() {
 
   // Auto-reset book to front page after 2 seconds on the back cover (page 5)
   useEffect(() => {
-    if (currentPage === 5) {
+    if (currentPage === 6) {
       const timer = setTimeout(() => {
         handleReset();
       }, 2000);
