@@ -200,7 +200,7 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
         </div>
       </div>
 
-      {/* ================= SHEET 5: FUN FACTS / INNER BACK ================= */}
+      {/* ================= SHEET 5: FUN FACTS / CONTACT ================= */}
       <div className={`book-page ${currentPage >= 5 ? 'flipped' : ''} ${isSheetActive(5) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(5) }}>
         {/* Front Side: Fun Facts (right page, spread 4) */}
         <div className={`page-side page-front ${isFrontActive(5) ? '' : 'sheet-inactive'}`}>
@@ -211,8 +211,20 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
           />
         </div>
 
-        {/* Back Side: Inner back decorative (left page, spread 5) */}
+        {/* Back Side: Contact (left page, spread 5) */}
         <div className={`page-side page-back ${isBackActive(5) ? '' : 'sheet-inactive'}`}>
+          <ContactPage
+            currentPage={currentPage}
+            goToPage={goToPage}
+            onPrev={(e) => handlePageTurn('prev', e)}
+          />
+        </div>
+      </div>
+
+      {/* ================= SHEET 6: INNER BACK / BACK COVER ================= */}
+      <div className={`book-page ${currentPage >= 6 ? 'flipped' : ''} ${isSheetActive(6) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(6) }}>
+        {/* Front Side: Inner back decorative (right page, spread 5) */}
+        <div className={`page-side page-front ${isFrontActive(6) ? '' : 'sheet-inactive'}`}>
           <div className="paper-page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', height: '100%', boxSizing: 'border-box' }}>
             <svg viewBox="0 0 120 120" width="72" height="72" fill="none">
               <circle cx="60" cy="60" r="40" stroke="rgba(197,168,128,0.2)" strokeWidth="1"/>
@@ -226,18 +238,6 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
               designed beneath<br/>the twilight sky
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* ================= SHEET 6: CONTACT / BACK COVER ================= */}
-      <div className={`book-page ${currentPage >= 6 ? 'flipped' : ''} ${isSheetActive(6) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(6) }}>
-        {/* Front Side: Contact (right page, spread 5) */}
-        <div className={`page-side page-front ${isFrontActive(6) ? '' : 'sheet-inactive'}`}>
-          <ContactPage
-            currentPage={currentPage}
-            goToPage={goToPage}
-            onNext={(e) => handlePageTurn('next', e)}
-          />
         </div>
 
         {/* Back Cover */}
