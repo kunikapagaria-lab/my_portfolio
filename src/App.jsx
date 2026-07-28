@@ -27,7 +27,9 @@ function App() {
 
   // Synchronize book open state with page index changes
   const handleNextPage = () => {
-    if (currentPage < 6) {
+    if (currentPage === 5) {
+      setCurrentPage(0); // Close book after last page
+    } else if (currentPage < 5) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -73,13 +75,6 @@ function App() {
     };
   }, [currentPage]);
 
-  // Auto-reset to front cover 2 seconds after the back cover appears.
-  useEffect(() => {
-    if (currentPage === 6) {
-      const timer = setTimeout(() => handleReset(), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [currentPage]);
 
 
   return (
