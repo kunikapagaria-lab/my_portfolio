@@ -17,7 +17,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
 
-  const isOpen = currentPage > 0 && currentPage <= 6;
+  const isOpen = currentPage > 0 && currentPage < 6;
 
   // Switch to page-appropriate camera defaults when navigating
   const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
@@ -101,7 +101,7 @@ function App() {
       </div>
 
       {/* 3.5. Interactive Navigation Header Overlay (only visible when book is open) */}
-      {isOpen && currentPage < 6 && (
+      {isOpen && (
         <CelestialHeader currentPage={currentPage} goToPage={goToPage} />
       )}
 
