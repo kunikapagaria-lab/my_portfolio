@@ -578,8 +578,8 @@ export const ContactPage = ({ onPrev, onNext }) => {
         </form>
       )}
 
-      {onPrev && <div className="page-number" onClick={onPrev}>8</div>}
-      {onNext && <div className="page-number" onClick={onNext}>8</div>}
+      {onPrev && <div className="page-number" onClick={onPrev}>9</div>}
+      {onNext && <div className="page-number" onClick={onNext}>9</div>}
     </div>
   );
 };
