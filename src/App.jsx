@@ -73,13 +73,11 @@ function App() {
     };
   }, [currentPage]);
 
-  // Auto-reset book to front page after 2 seconds on the back cover (page 5)
+  // Reset to front cover immediately when reaching the back cover (page 6).
+  // The 0.9s page-flip CSS animation briefly shows the back cover as a closing effect.
   useEffect(() => {
     if (currentPage === 6) {
-      const timer = setTimeout(() => {
-        handleReset();
-      }, 2000);
-      return () => clearTimeout(timer);
+      handleReset();
     }
   }, [currentPage]);
 
