@@ -13,15 +13,18 @@ const CelestialHeader = ({ currentPage, goToPage }) => {
 
   const tabWidth = 110;
   const startOffset = 55;
-  // Find which tab index should show the star (match by page, take first match)
-  const activeTabIndex = chapters.findIndex(ch => ch.page === activeNodeId);
-  const starOffset = (activeTabIndex >= 0 ? activeTabIndex : 0) * tabWidth + startOffset;
+  // Find the last chapter whose page is at or before the current page
+  let activeTabIndex = 0;
+  for (let i = chapters.length - 1; i >= 0; i--) {
+    if (chapters[i].page <= activeNodeId) { activeTabIndex = i; break; }
+  }
+  const starOffset = activeTabIndex * tabWidth + startOffset;
 
   return (
     <div className="celestial-header-container">
       <div className="celestial-header-tabs" style={{ width: `${chapters.length * tabWidth}px` }}>
         {chapters.map((ch) => {
-          const isActive = ch.page === activeNodeId;
+          const isActive = chapters.indexOf(ch) === activeTabIndex;
           return (
             <button
               key={ch.id}
