@@ -16,8 +16,7 @@ function App() {
   const [is3D, setIs3D] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
-  // Keep spread layout during page-6 flip animation
-  const isOpen = currentPage > 0 && currentPage <= 6;
+  const isOpen = currentPage > 0 && currentPage < 6;
 
   // Switch to page-appropriate camera defaults when navigating
   const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
@@ -27,9 +26,8 @@ function App() {
 
   // Synchronize book open state with page index changes
   const handleNextPage = () => {
-    if (currentPage < 6) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage > 0 && currentPage < 5) setCurrentPage(currentPage + 1);
+    else if (currentPage === 5) setCurrentPage(0);
   };
 
   const handlePrevPage = () => {
@@ -73,13 +71,6 @@ function App() {
     };
   }, [currentPage]);
 
-  // At page 6: let the flip animation play (0.9s), then close back to front cover
-  useEffect(() => {
-    if (currentPage === 6) {
-      const timer = setTimeout(() => setCurrentPage(0), 950);
-      return () => clearTimeout(timer);
-    }
-  }, [currentPage]);
 
   return (
     <JourneyProvider>
@@ -100,7 +91,7 @@ function App() {
       </div>
 
       {/* 3.5. Interactive Navigation Header Overlay (only visible when book is open) */}
-      {isOpen && currentPage < 6 && (
+      {isOpen && (
         <CelestialHeader currentPage={currentPage} goToPage={goToPage} />
       )}
 

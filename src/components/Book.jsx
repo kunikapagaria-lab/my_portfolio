@@ -19,8 +19,9 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
 
   const handlePageTurn = (dir, e) => {
     e.stopPropagation();
-    if (dir === 'next' && currentPage < 6) {
-      setCurrentPage(currentPage + 1);
+    if (dir === 'next') {
+      if (currentPage === 5) setCurrentPage(0);
+      else if (currentPage < 5) setCurrentPage(currentPage + 1);
     } else if (dir === 'prev' && currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
