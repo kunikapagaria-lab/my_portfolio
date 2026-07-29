@@ -2501,6 +2501,53 @@ body {
 }
 
 /* ==========================================================================
+   INNER BACK PAGE (right page at spread 5 — click to close book)
+   ========================================================================== */
+.inner-back-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  height: 100%;
+  box-sizing: border-box;
+  transition: background 0.2s;
+}
+
+.inner-back-page:hover {
+  background: rgba(197, 168, 128, 0.04);
+}
+
+.inner-back-tagline {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  color: rgba(28, 45, 94, 0.35);
+  letter-spacing: 0.06em;
+  text-align: center;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.inner-back-close {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(197, 168, 128, 0.55);
+  margin-top: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  border-radius: 20px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.inner-back-page:hover .inner-back-close {
+  color: rgba(197, 168, 128, 0.9);
+  border-color: rgba(197, 168, 128, 0.5);
+}
+
+/* ==========================================================================
    JOURNEY MAP STYLING
    ========================================================================== */
 .jmap-page-wrap {

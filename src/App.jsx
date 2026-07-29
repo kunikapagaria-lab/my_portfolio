@@ -41,7 +41,7 @@ function App() {
   };
 
   const goToPage = (pageIndex) => {
-    setCurrentPage(pageIndex);
+    if (pageIndex >= 0 && pageIndex <= 5) setCurrentPage(pageIndex);
   };
 
   // Keyboard navigation for turning pages

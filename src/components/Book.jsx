@@ -224,10 +224,14 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
 
       {/* ================= SHEET 6: INNER BACK / BACK COVER ================= */}
       <div className={`book-page ${currentPage >= 6 ? 'flipped' : ''} ${isSheetActive(6) ? '' : 'sheet-inactive'}`} style={{ zIndex: sheetZIndex(6) }}>
-        {/* Front Side: Inner back decorative (right page, spread 5) */}
-        <div className={`page-side page-front ${isFrontActive(6) ? '' : 'sheet-inactive'}`}>
-          <div className="paper-page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', height: '100%', boxSizing: 'border-box' }}>
-            <svg viewBox="0 0 120 120" width="72" height="72" fill="none">
+        {/* Front Side: Inner back decorative (right page, spread 5) — click to close book */}
+        <div
+          className={`page-side page-front ${isFrontActive(6) ? '' : 'sheet-inactive'}`}
+          onClick={(e) => { e.stopPropagation(); goToPage(0); }}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="paper-page inner-back-page">
+            <svg viewBox="0 0 120 120" width="64" height="64" fill="none">
               <circle cx="60" cy="60" r="40" stroke="rgba(197,168,128,0.2)" strokeWidth="1"/>
               <path d="M60 20 L63 50 L93 53 L63 56 L60 86 L57 56 L27 53 L57 50 Z" fill="rgba(197,168,128,0.32)"/>
               <circle cx="60" cy="60" r="3" fill="rgba(197,168,128,0.55)"/>
@@ -235,9 +239,8 @@ const Book = ({ isOpen, currentPage, setCurrentPage }) => {
               <circle cx="90" cy="28" r="1" fill="rgba(197,168,128,0.22)"/>
               <circle cx="88" cy="88" r="1.5" fill="rgba(197,168,128,0.28)"/>
             </svg>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.88rem', color: 'rgba(28,45,94,0.35)', letterSpacing: '0.06em', textAlign: 'center', fontStyle: 'italic', lineHeight: 1.6 }}>
-              designed beneath<br/>the twilight sky
-            </div>
+            <p className="inner-back-tagline">designed beneath<br/>the twilight sky</p>
+            <div className="inner-back-close">↩ close the book</div>
           </div>
         </div>
 
