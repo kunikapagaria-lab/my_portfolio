@@ -136,7 +136,7 @@ function App() {
         </div>
       ) : (
         /* 2D HTML/CSS Book View */
-        <div className="book-wrapper">
+        <div className="book-wrapper" style={{ visibility: currentPage === 6 ? 'hidden' : 'visible' }}>
           <div
             style={{
               display: 'flex',
