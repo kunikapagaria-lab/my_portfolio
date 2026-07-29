@@ -16,8 +16,10 @@ function App() {
   const [is3D, setIs3D] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [bookCamParams, setBookCamParams] = useState(DEFAULT_BOOK_CAM);
+  const [showBackCover, setShowBackCover] = useState(false);
 
-  const isOpen = currentPage > 0 && currentPage < 6;
+  // Keep spread layout during page-6 flip animation, then show overlay
+  const isOpen = currentPage > 0 && currentPage <= 6;
 
   // Switch to page-appropriate camera defaults when navigating
   const currentDefault = currentPage === 2 ? DEFAULT_BOOK_CAM_JOURNEY : DEFAULT_BOOK_CAM;
@@ -73,11 +75,14 @@ function App() {
     };
   }, [currentPage]);
 
-  // Auto-reset after showing the back cover
+  // At page 6: let the flip animation play (0.9s), then show back cover overlay
   useEffect(() => {
     if (currentPage === 6) {
-      const timer = setTimeout(() => setCurrentPage(0), 2000);
-      return () => clearTimeout(timer);
+      const flipDone = setTimeout(() => setShowBackCover(true), 950);
+      const reset = setTimeout(() => { setShowBackCover(false); setCurrentPage(0); }, 950 + 2000);
+      return () => { clearTimeout(flipDone); clearTimeout(reset); };
+    } else {
+      setShowBackCover(false);
     }
   }, [currentPage]);
 
@@ -100,7 +105,7 @@ function App() {
       </div>
 
       {/* 3.5. Interactive Navigation Header Overlay (only visible when book is open) */}
-      {isOpen && (
+      {isOpen && currentPage < 6 && (
         <CelestialHeader currentPage={currentPage} goToPage={goToPage} />
       )}
 
@@ -136,7 +141,7 @@ function App() {
         </div>
       ) : (
         /* 2D HTML/CSS Book View */
-        <div className="book-wrapper" style={{ visibility: currentPage === 6 ? 'hidden' : 'visible' }}>
+        <div className="book-wrapper" style={{ visibility: showBackCover ? 'hidden' : 'visible' }}>
           <div
             style={{
               display: 'flex',
@@ -200,8 +205,8 @@ function App() {
         </div>
       </div>
 
-      {/* Back cover — fixed overlay, independent of the book's flip/transition system */}
-      {currentPage === 6 && (
+      {/* Back cover overlay — appears after the flip animation completes */}
+      {showBackCover && (
         <div style={{
           position: 'fixed', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
